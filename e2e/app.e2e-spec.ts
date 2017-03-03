@@ -1,10 +1,10 @@
-import { WordcampPage } from './app.po';
+import { WordCampPage } from './app.po';
 
-describe('wordcamp App', function() {
-  let page: WordcampPage;
+describe('word-camp App', function() {
+  let page: WordCampPage;
 
   beforeEach(() => {
-    page = new WordcampPage();
+    page = new WordCampPage();
   });
 
   it('should display message saying app works', () => {

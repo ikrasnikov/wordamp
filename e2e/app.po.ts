@@ -1,6 +1,6 @@
 import { browser, element, by } from 'protractor';
 
-export class WordcampPage {
+export class WordCampPage {
   navigateTo() {
     return browser.get('/');
   }
