@@ -1,3 +1,68 @@
-<p>
-  singleplayer-menu works!
-</p>
+
+<div class="create_game col-xs-8 center">
+  <h2 class="text-center crafty_girls">Create new game</h2>
+
+  <form [formGroup]="menuGame" (ngSubmit)="menuGame.valid && onSubmit($event)">
+
+    <div class="form-group">
+      <label for="username" class="title">Enter Username</label>
+      <input type="text" class="form-control" autocomplete="off" placeholder="username" id="username" required name="username"  formControlName="username">
+
+       <div  *ngIf="menuGame.controls.username.touched">
+	        <div class="alert alert-dismissible alert-danger" *ngIf="menuGame.controls.username.hasError('required')">
+			  	<strong style="color:black">Enter name!</strong> Name is required.
+	        </div>
+	        <div class="alert alert-dismissible alert-danger" *ngIf="menuGame.controls.username.hasError('minlength')">
+        		<strong style="color:black">Enter more letter!</strong> Name minLength === 3.
+        	</div>
+		  </div>
+    </div>
+
+    <div class="form-group type">
+      <p class="crafty_girls title">Choose Type Of Game:</p>
+
+      <input hidden type="radio" id="single" value="single" name="type" formControlName="type">
+      <label class="single" for="single">SINGLE</label>
+
+      <input hidden type="radio" id="multi" value="multi" name="type" formControlName="type">
+      <label class="multi" for="multi">MULTIPLE</label>
+
+      <div class="clearfix"></div>
+    </div>
+
+    <div class="form-group lang">
+      <p class="crafty_girls title">Choose Languages:</p>
+
+      <input hidden type="radio" id="en_ru" value="en_ru" name="languages" formControlName="languages">
+      <label class="en_ru" for="en_ru"></label>
+
+      <input hidden type="radio" id="en_de" value="en_de" name="languages" formControlName="languages">
+      <label class="en_de" for="en_de"></label>
+
+      <input hidden type="radio"  id="de_ru" value="de_ru" name="languages" formControlName="languages">
+      <label class="de_ru" for="de_ru"></label>
+
+      <div class="clearfix"></div>
+    </div>
+
+    <div class="form-group difficulty">
+      <p class="crafty_girls title">Choose Difficulty:</p>
+
+      <input hidden type="radio" id="small" value="small" name="difficulty" formControlName="difficulty">
+      <label class="small" for="small">Small</label>
+
+      <input hidden type="radio" id="medium" value="medium" name="difficulty" formControlName="difficulty">
+      <label class="medium" for="medium">Medium</label>
+
+      <input hidden type="radio"  id="large" value="large" name="difficulty" formControlName="difficulty">
+      <label class="large" for="large">Large</label>
+
+      <div class="clearfix"></div>
+    </div>
+    <div class="submit">
+      <button type="submit" class="btn btn-info pull-right btn-lg" [disabled]='!menuGame.valid'>START GAME</button>
+    </div>
+
+  </form>
+
+</div>

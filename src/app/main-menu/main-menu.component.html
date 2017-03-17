@@ -31,6 +31,35 @@
     </div>
 
   </div><!--start_box-->
+   <div class=" waiting start_box" *ngIf="isWait">
 
+      <div class="row">
+        <div class="col-xs-12">
+          <a href="#" class="mainmenu btn btn-info btn-lg" (click)="goToMainMenu()">Main menu</a>
+        </div>
+      </div>
+
+      <div class="row">
+        <div  class="col-xs-12">
+          <h1 class="title-wait text-center">Wait for second user=)</h1>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="form-group share">
+          <label for="share_link" class="col-xs-12 col-md-5 control-label text-center">Share link to friend:</label>
+          <div class="col-xs-12 col-md-7 share-input">
+              <input type="text" class="form-control center-block" id="share_link" [value]="shareAbleLink">
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div  class="col-xs-12">
+          <img class="center-block image-wait" src="/assets/img/wait.gif">
+        </div>
+      </div>
+
+  </div>
 
 </div>

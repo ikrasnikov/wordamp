@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { MainmenuService } from "./mainmenu.service";
 import { Router, ActivatedRoute } from '@angular/router';
+import { AngularFire } from 'angularfire2';
 import { Subscription } from "rxjs";
 
 @Component({
@@ -13,10 +14,15 @@ export class MainMenuComponent {
   public isNewUser: boolean;
   public isMainMenuPage: boolean;
 
-  constructor( private _menuService: MainmenuService,
-              private _router: Router,
-              private _activatedRoute: ActivatedRoute ) {
+  public isWait:boolean = false;
+  public shareAbleLink: string = "";
+  private _waitForUserSubscriber: Subscription;
 
+
+  constructor(private _menuService: MainmenuService,
+              private _router: Router,
+              private _activatedRoute: ActivatedRoute,
+              private _af : AngularFire ) {
 
     this.isNewUser = this._checkIsNewUser();
     this.isMainMenuPage  = this._getUrlActivatedRoute();
@@ -26,6 +32,26 @@ export class MainMenuComponent {
       this.isMainMenuPage = result;
     });
 
+    //if user created a multiplayer game
+    this._waitForUserSubscriber = this._menuService.waitForSecondUserMultiplayer.subscribe((id) => {
+      this.isWait = true;
+
+      let base = document.querySelector('base').getAttribute("href") || "/";
+      this.shareAbleLink = window.location.origin.concat(base, "mainmenu/multi/", id);
+
+    });
+
+    // event on starting game
+    let startGameSubscriber: Subscription = this._menuService.startPlayingGame.subscribe( (id) => {
+      startGameSubscriber.unsubscribe();
+      isShowInfoForNewUserSubscribe.unsubscribe();
+     // this._router.navigate(['playzone', id]);  // send user  on game-field
+     console.log("game start");
+    });
+
+   }
+
+   ngOnInit() {
    }
 
   private _checkIsNewUser():boolean {
@@ -39,6 +65,15 @@ export class MainMenuComponent {
 
   private _getUrlActivatedRoute():boolean {
     return this._activatedRoute.snapshot.url.join('') === "mainmenu";
+  }
+
+   public goToMainMenu(): void{
+    let array:string[] = this.shareAbleLink.split("/");
+    this._af.database.object(`rooms/${array[array.length-1]}`).remove()
+      .then(() => {
+        this.isWait = false;
+        this._router.navigate(['mainmenu/single']);
+      })
   }
 
 }
