@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { MainmenuService } from "./mainmenu.service";
-import { Router, ActivatedRoute, Params } from '@angular/router';
-import { FirebaseService } from "../firebase.service";
+import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from "rxjs";
 
 @Component({
@@ -23,7 +22,7 @@ export class MainMenuComponent {
     this.isMainMenuPage  = this._getUrlActivatedRoute();
 
     //set value to show or not intro
-    let isShowInfoForNewUserSubscribe: Subscription = this._menuService.isHideIntro.subscribe((result) => {
+    let isShowInfoForNewUserSubscribe: Subscription = this._menuService.isHideIntroForUser.subscribe((result) => {
       this.isMainMenuPage = result;
     });
 
