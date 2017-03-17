@@ -13,7 +13,6 @@ import { AppComponent } from './app.component';
 import { MainMenuComponent } from './main-menu/main-menu.component';
 
 import { MainmenuService } from "./main-menu/mainmenu.service";
-import { FirebaseService } from "./firebase.service";
 
 import { AppRoutingModule, routingComponents } from './app.routing';
 
@@ -34,7 +33,7 @@ import { AppRoutingModule, routingComponents } from './app.routing';
     AppRoutingModule,
     AngularFireModule.initializeApp(firebaseConfig)
   ],
-  providers: [FirebaseService, MainmenuService],
+  providers: [MainmenuService],
   bootstrap: [AppComponent],
 })
 export class AppModule { }
