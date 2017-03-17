@@ -13,7 +13,9 @@ import { AppComponent } from './app.component';
 import { MainMenuComponent } from './main-menu/main-menu.component';
 
 import { MainmenuService } from "./main-menu/mainmenu.service";
+import { SingleplayerService } from "./main-menu/singleplayer-menu/singleplayer.service";
 import { FirebaseService } from "./firebase.service";
+import { MultiplayerService } from "./main-menu/multiplayer-menu/multiplayer.service";
 
 import { AppRoutingModule, routingComponents } from './app.routing';
 
@@ -34,7 +36,7 @@ import { AppRoutingModule, routingComponents } from './app.routing';
     AppRoutingModule,
     AngularFireModule.initializeApp(firebaseConfig)
   ],
-  providers: [FirebaseService, MainmenuService],
+  providers: [FirebaseService, MainmenuService, SingleplayerService, MultiplayerService],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

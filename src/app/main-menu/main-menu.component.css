@@ -1,0 +1,86 @@
+h1 {
+  font-size: 4.5em;
+  text-shadow: 1px 2px 5px #0E0E69;
+}
+
+.start_box {
+  min-height: 200px;
+}
+
+.menu {
+   float: none;
+   margin: 10px auto;
+   width: 50%;
+}
+
+.menu .link.btn-info{
+  box-shadow: 0 0 2px 2px rgba(0,0,0,0.5) ;
+}
+
+
+.settings{
+  box-shadow: 0 0 6px 2px rgba(0,0,0,0.5) ;
+  width: 100%;
+  height: 850px;
+
+}
+
+ router-outlet {
+   margin: 2%;
+ }
+ span {
+   font-size: 2em;
+   padding: 15px;
+ }
+ h2 {
+  padding:10px 30px;
+  font-size: 3em;
+  text-shadow: 1px 2px 5px #4A708B;
+}
+span .bold{
+  font-weight: bold;
+   font-size: inherit;
+   color: #4A708B;
+}
+.info {
+  width: 50px;
+  position:fixed;
+  top: 50px;
+  left: 65%;
+}
+
+.intro {
+  padding: 20px;
+  margin: 20px;
+}
+/********wait******/
+.waiting {
+  /*position: relative;*/
+  margin: 4% auto;
+}
+.waiting .title-wait{
+  text-shadow: 1px 2px 5px #20B2AA;
+  margin-top: 3%;
+}
+label {
+  font-size: 2em;
+}
+input {
+    font-size:1.2em;
+}
+.form-group.share {
+  margin-top: 4%;
+}
+.image-wait {
+  margin: 2% auto;
+  box-shadow: 0 0 2px 2px rgba(0,0,0,0.5) ;
+  border-radius: 20px;
+  width: 55%;
+}
+.btn.btn-info.mainmenu{
+  box-shadow: 0 0 6px 2px rgba(0,0,0,0.5);
+  float: right !important;
+}
+.share-input {
+  margin: 0 auto;
+}
