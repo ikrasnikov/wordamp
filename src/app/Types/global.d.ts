@@ -1,16 +1,3 @@
-type TInputData = {
-    type:string,
-    languages:string,
-    difficulty:string,
-    username:string
-};
-type TOutputData = {
-    difficulty: {src: string}[],
-    id: string,
-    language: string,
-    player: string
-};
-
 type TUser = {
     name: string,
     score: number,
@@ -26,13 +13,3 @@ type TCard = {
     isHide:boolean,
     word:string
 };
-
-type TStoreData =  {
-    cards: TCard,
-    type: string,
-    state: boolean,
-    difficulty: string,
-    languages: string,
-    users: TUser[],
-    countHiddenBlock: number
-}
