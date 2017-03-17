@@ -14,9 +14,23 @@ import { MainMenuComponent } from './main-menu/main-menu.component';
 
 import { MainmenuService } from "./main-menu/mainmenu.service";
 
-import { AppRoutingModule, routingComponents } from './app.routing';
-
-
+const routes = [
+   {
+    path: "mainmenu", component: MainMenuComponent,
+    children: [
+      {
+        path: 'single', component: SingleplayerMenuComponent
+      },
+      {
+        path: 'multi', component: MultiplayerMenuComponent
+      }]
+  },
+  {
+    path: '',
+    redirectTo: '/mainmenu',
+    pathMatch: 'full'
+  }
+];
 
 @NgModule({
   declarations: [
@@ -30,8 +44,8 @@ import { AppRoutingModule, routingComponents } from './app.routing';
     FormsModule,
     ReactiveFormsModule,
     HttpModule,
-    AppRoutingModule,
-    AngularFireModule.initializeApp(firebaseConfig)
+    AngularFireModule.initializeApp(firebaseConfig),
+    RouterModule.forRoot(routes),
   ],
   providers: [MainmenuService],
   bootstrap: [AppComponent],
