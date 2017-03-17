@@ -17,9 +17,6 @@ import { MainMenuComponent } from './main-menu/main-menu.component';
       }]
   },
   {
-    path: "mainmenu/multi/:id", component: MainMenuComponent
-  },
-  {
     path: '',
     redirectTo: '/mainmenu',
     pathMatch: 'full'

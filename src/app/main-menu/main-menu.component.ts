@@ -12,30 +12,24 @@ import { Subscription } from "rxjs";
 export class MainMenuComponent {
 
   public isNewUser: boolean;
-  public currentPage: boolean;
-  public userName: string;
-  public isWait:boolean = false;
-  public shareAbleLink: string = "";
-  public multiSubscribe: Subscription;
+  public isMainMenuPage: boolean;
 
   constructor( private _menuService: MainmenuService,
               private _router: Router,
               private _activatedRoute: ActivatedRoute ) {
 
 
+    this.isNewUser = this._checkIsNewUser();
+    this.isMainMenuPage  = this._getUrlActivatedRoute();
+
     //set value to show or not intro
     let isShowInfoForNewUserSubscribe: Subscription = this._menuService.isHideIntro.subscribe((result) => {
-      this.currentPage = result;
+      this.isMainMenuPage = result;
     });
 
-    this.isNewUser = this._checkUser();
-    this.currentPage  = this._checkRouter();
    }
 
-   ngOnInit() {
-   }
-
-  private _checkUser():boolean {
+  private _checkIsNewUser():boolean {
     if (this._menuService.getLocalStorageValue("username")) {
        this._router.navigate(['mainmenu/single']);
        return false;
@@ -44,7 +38,7 @@ export class MainMenuComponent {
     }
   }
 
-  private _checkRouter():boolean {
+  private _getUrlActivatedRoute():boolean {
     return this._activatedRoute.snapshot.url.join('') === "mainmenu";
   }
 
