@@ -14,11 +14,11 @@ export class SingleplayerMenuComponent {
   public menuGame: FormGroup;
 
   constructor(private _build: FormBuilder,
-              private  _singleService: SingleplayerService,
-              private _localSrorage: LocalStorageService,
-              private _createGameService: CreateGameService) {
-                
-    let name: string =  this._localSrorage.getLocalStorageValue("username");
+    private _singleService: SingleplayerService,
+    private _localSrorage: LocalStorageService,
+    private _createGameService: CreateGameService) {
+
+    let name: string = this._localSrorage.getLocalStorageValue("username");
 
     //reactive form for user
     this.menuGame = this._build.group({
@@ -27,12 +27,11 @@ export class SingleplayerMenuComponent {
       languages: new FormControl('en_ru'),
       difficulty: new FormControl('small')
     });
-    this._createGameService.isHideIntroForUser.emit(false);
 
   }
 
 
-  public onSubmit(event: Event): void{
+  public onSubmit(event: Event): void {
     this._localSrorage.setLocalStorageValue("userid", "0");
     this._singleService.setUserNameAtLocalStorage(this.menuGame.value.username);
 
