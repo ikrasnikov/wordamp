@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
 import { SingleplayerService } from "./singleplayer.service";
 import { MainmenuService } from "../mainmenu.service";
+import { LocalStorageService } from "../../local-storage.service";
 
 @Component({
   selector: 'app-singleplayer-menu',
@@ -14,9 +15,10 @@ export class SingleplayerMenuComponent {
 
   constructor(private _build: FormBuilder,
               private  _singleService: SingleplayerService,
+              private _localSrorage: LocalStorageService,
               private _menuService: MainmenuService) {
                 
-    let name: string =  this._menuService.getLocalStorageValue("username");
+    let name: string =  this._localSrorage.getLocalStorageValue("username");
 
     //reactive form for user
     this.menuGame = this._build.group({
@@ -27,15 +29,13 @@ export class SingleplayerMenuComponent {
     });
     this._menuService.isHideIntroForUser.emit(false);
 
-    this._menuService.getUsernameFromFormSubscriber = this.menuGame.valueChanges.subscribe(() => {
-       this._singleService.setUserNameAtLocalStorage(this.menuGame.value.username);
-    })
   }
 
 
   public onSubmit(event: Event): void{
-    this._menuService.getUsernameFromFormSubscriber.unsubscribe();
-    this._menuService.setLocalStorageValue("userid", "0");
+    this._localSrorage.setLocalStorageValue("userid", "0");
+    this._singleService.setUserNameAtLocalStorage(this.menuGame.value.username);
+
     this._menuService.makePlayZone(this.menuGame.value);
     event.preventDefault();
   }

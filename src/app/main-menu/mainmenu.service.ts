@@ -10,7 +10,7 @@ import 'rxjs/add/operator/switchMap';
 export class MainmenuService {
 
   public isHideIntroForUser: EventEmitter<boolean>;
-  public getUsernameFromFormSubscriber: Subscription;
+ // public getUsernameFromFormSubscriber: Subscription;
 
   private _createRoomOnFirebase: FirebaseObjectObservable<any>;
   private _firstLanguageArray:string[];
@@ -33,7 +33,7 @@ export class MainmenuService {
     let size: {w: number, h:number} = SIZE[difficulty];
     let [lang1, lang2] = languages.split('_');
     let cards: TCard[][] = [];
-    let idRoom: number = this._generateIdRoom();
+    let idRoom: number = this._getGeneratedIdForRoom();
 
    
     this._af.database.object(`/dictionary/${lang1}`)
@@ -47,7 +47,7 @@ export class MainmenuService {
       .subscribe(() => {
         let newRoom: any = {};
 
-        cards = this._createCards( size.w, size.h );
+        cards = this._createPlayingCards( size.w, size.h );
         newRoom[idRoom] = { cards: cards ,type:type, state: true, difficulty: difficulty, languages: languages, users: [{name: username, score: score, id: 0, isActive: true, activity: true, result: 'lose'}], countHiddenBlock: 0 };
 
         this._createRoomOnFirebase.update(newRoom)          //send data to FireBase
@@ -59,7 +59,7 @@ export class MainmenuService {
   }
 
 
-  private  _createCards(col: number, row: number): TCard[][] {
+  private _createPlayingCards(col: number, row: number): TCard[][] {
     let arr: TCard[] = [];
     let wordIdList: number[] = this._getWordIdList(row * col);
 
@@ -110,23 +110,13 @@ export class MainmenuService {
     return (item % 2 === 0)?  this._firstLanguageArray[wordId] :  this._lastLanguageArray[wordId];
   }
 
-  private _generateIdRoom():number {
+  private _getGeneratedIdForRoom():number {
     return new Date().getTime();
   }
 
-
-  // work with localStorage
-  public setLocalStorageValue(name: string, value: string):void {
-    (localStorage as Storage).setItem(name, value);
+  public getShariableLink(roomId: string):string {
+    let base = document.querySelector('base').getAttribute("href") || "/";
+    return  window.location.origin.concat(base, "mainmenu/multi/", roomId)
   }
-
-  public getLocalStorageValue(name: string): string {
-    return (localStorage as Storage).getItem(name);
-  }
-
-  public removeLocalStorageValue(name: string) {
-    (localStorage as Storage).removeItem(name);
-  }
-
 }
 

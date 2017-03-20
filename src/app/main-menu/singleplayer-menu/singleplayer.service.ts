@@ -1,25 +1,23 @@
 import { Injectable } from '@angular/core';
-import { MainmenuService } from '../mainmenu.service';
+import { LocalStorageService } from "../../local-storage.service";
 
 @Injectable()
 export class SingleplayerService {
 
-  constructor(private _menuService:MainmenuService) { }
+  constructor(private _localStorage:LocalStorageService) { }
 
    public setUserNameAtLocalStorage(name :string):void {
-      let currentName = this._menuService.getLocalStorageValue("username");
+      let currentName: string = this._localStorage.getLocalStorageValue("username");
+      let setValueUsername: string = "";
 
-      if (currentName) {
-        if (name !== currentName)
-        {
-          this._menuService.removeLocalStorageValue("username");
-          this._menuService.setLocalStorageValue("username", name);
-        }
+      if (name === "") {
+        setValueUsername = "Anonimous";
+      } else if (name !== currentName) {
+         setValueUsername = name;
       }
-      else {
-          this._menuService.removeLocalStorageValue("username");
-          this._menuService.setLocalStorageValue("username", name);
-      }
+      
+      this._localStorage.setLocalStorageValue("username", setValueUsername);
+      
    }
 
 }

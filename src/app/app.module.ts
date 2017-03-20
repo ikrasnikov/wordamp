@@ -14,6 +14,7 @@ import { SingleplayerService } from "./main-menu/singleplayer-menu/singleplayer.
 
 import { MultiplayerMenuComponent } from  './main-menu/multiplayer-menu/multiplayer-menu.component';
 import { AppComponent } from './app.component';
+import { LocalStorageService } from "./local-storage.service";
 
 
 const routes = [
@@ -49,7 +50,7 @@ const routes = [
     AngularFireModule.initializeApp(firebaseConfig),
     RouterModule.forRoot(routes),
   ],
-  providers: [MainmenuService, SingleplayerService],
+  providers: [MainmenuService, SingleplayerService, LocalStorageService],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

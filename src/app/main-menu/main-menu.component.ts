@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { MainmenuService } from "./mainmenu.service";
+import { LocalStorageService } from "../local-storage.service";
 import { Router, ActivatedRoute } from '@angular/router';
 import { AngularFire } from 'angularfire2';
 import { Subscription } from "rxjs";
@@ -22,6 +23,7 @@ export class MainMenuComponent {
   constructor(private _menuService: MainmenuService,
               private _router: Router,
               private _activatedRoute: ActivatedRoute,
+              private _localSrorage: LocalStorageService,
               private _af : AngularFire ) {
 
     this.isNewUser = this._checkIsNewUser();
@@ -35,10 +37,7 @@ export class MainMenuComponent {
     //if user created a multiplayer game
     this._waitForUserSubscriber = this._menuService.waitForSecondUserMultiplayer.subscribe((id) => {
       this.isWait = true;
-
-      let base = document.querySelector('base').getAttribute("href") || "/";
-      this.shareAbleLink = window.location.origin.concat(base, "mainmenu/multi/", id);
-
+      this.shareAbleLink  = this._menuService.getShariableLink(id);
     });
 
     // event on starting game
@@ -46,7 +45,7 @@ export class MainMenuComponent {
       startGameSubscriber.unsubscribe();
       isShowInfoForNewUserSubscribe.unsubscribe();
      // this._router.navigate(['playzone', id]);  // send user  on game-field
-     console.log("game start");
+      console.log("game start");
     });
 
    }
@@ -55,7 +54,7 @@ export class MainMenuComponent {
    }
 
   private _checkIsNewUser():boolean {
-    if (this._menuService.getLocalStorageValue("username")) {
+    if (this._localSrorage.getLocalStorageValue("username")) {
        this._router.navigate(['mainmenu/single']);
        return false;
     } else {
