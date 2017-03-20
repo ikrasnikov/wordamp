@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { MainmenuService } from "./mainmenu.service";
+import { CreateGameService } from "./create-game.service";
 import { LocalStorageService } from "../local-storage.service";
 import { Router, ActivatedRoute } from '@angular/router';
 import { AngularFire } from 'angularfire2';
@@ -20,7 +20,7 @@ export class MainMenuComponent {
   private _waitForUserSubscriber: Subscription;
 
 
-  constructor(private _menuService: MainmenuService,
+  constructor(private _creategameService: CreateGameService,
               private _router: Router,
               private _activatedRoute: ActivatedRoute,
               private _localSrorage: LocalStorageService,
@@ -30,18 +30,18 @@ export class MainMenuComponent {
     this.isMainMenuPage  = this._getUrlActivatedRoute();
 
     //set value to show or not intro
-    let isShowInfoForNewUserSubscribe: Subscription = this._menuService.isHideIntroForUser.subscribe((result) => {
+    let isShowInfoForNewUserSubscribe: Subscription = this._creategameService.isHideIntroForUser.subscribe((result) => {
       this.isMainMenuPage = result;
     });
 
     //if user created a multiplayer game
-    this._waitForUserSubscriber = this._menuService.waitForSecondUserMultiplayer.subscribe((id) => {
+    this._waitForUserSubscriber = this._creategameService.waitForSecondUserMultiplayer.subscribe((id) => {
       this.isWait = true;
-      this.shareAbleLink  = this._menuService.getShariableLink(id);
+      this.shareAbleLink  = this._creategameService.getShariableLink(id);
     });
 
     // event on starting game
-    let startGameSubscriber: Subscription = this._menuService.startPlayingGame.subscribe( (id) => {
+    let startGameSubscriber: Subscription = this._creategameService.startPlayingGame.subscribe( (id) => {
       startGameSubscriber.unsubscribe();
       isShowInfoForNewUserSubscribe.unsubscribe();
      // this._router.navigate(['playzone', id]);  // send user  on game-field

@@ -7,10 +7,9 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/switchMap';
 
 @Injectable()
-export class MainmenuService {
+export class CreateGameService {
 
   public isHideIntroForUser: EventEmitter<boolean>;
- // public getUsernameFromFormSubscriber: Subscription;
 
   private _createRoomOnFirebase: FirebaseObjectObservable<any>;
   private _firstLanguageArray:string[];

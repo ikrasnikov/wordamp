@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
 import { SingleplayerService } from "./singleplayer.service";
-import { MainmenuService } from "../mainmenu.service";
+import { CreateGameService } from "../create-game.service";
 import { LocalStorageService } from "../../local-storage.service";
 
 @Component({
@@ -16,7 +16,7 @@ export class SingleplayerMenuComponent {
   constructor(private _build: FormBuilder,
               private  _singleService: SingleplayerService,
               private _localSrorage: LocalStorageService,
-              private _menuService: MainmenuService) {
+              private _createGameService: CreateGameService) {
                 
     let name: string =  this._localSrorage.getLocalStorageValue("username");
 
@@ -27,7 +27,7 @@ export class SingleplayerMenuComponent {
       languages: new FormControl('en_ru'),
       difficulty: new FormControl('small')
     });
-    this._menuService.isHideIntroForUser.emit(false);
+    this._createGameService.isHideIntroForUser.emit(false);
 
   }
 
@@ -36,7 +36,7 @@ export class SingleplayerMenuComponent {
     this._localSrorage.setLocalStorageValue("userid", "0");
     this._singleService.setUserNameAtLocalStorage(this.menuGame.value.username);
 
-    this._menuService.makePlayZone(this.menuGame.value);
+    this._createGameService.makePlayZone(this.menuGame.value);
     event.preventDefault();
   }
 
