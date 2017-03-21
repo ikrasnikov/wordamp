@@ -6,13 +6,16 @@ import { firebaseConfig } from './firebase.config';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule} from '@angular/forms';
 
+import { MainMenuComponent } from './main-menu/main-menu.component';
+import { CreateGameService } from "./main-menu/create-game.service";
 
 import { SingleplayerMenuComponent } from './main-menu/singleplayer-menu/singleplayer-menu.component';
+import { SingleplayerService } from "./main-menu/singleplayer-menu/singleplayer.service";
+
 import { MultiplayerMenuComponent } from  './main-menu/multiplayer-menu/multiplayer-menu.component';
 import { AppComponent } from './app.component';
-import { MainMenuComponent } from './main-menu/main-menu.component';
+import { LocalStorageService } from "./local-storage.service";
 
-import { MainmenuService } from "./main-menu/mainmenu.service";
 
 const routes = [
    {
@@ -47,7 +50,7 @@ const routes = [
     AngularFireModule.initializeApp(firebaseConfig),
     RouterModule.forRoot(routes),
   ],
-  providers: [MainmenuService],
+  providers: [CreateGameService, SingleplayerService, LocalStorageService],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

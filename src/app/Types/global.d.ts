@@ -13,3 +13,10 @@ type TCard = {
     isHide:boolean,
     word:string
 };
+
+type TInputData = {
+    type:string,
+    languages:string,
+    difficulty:string,
+    username:string
+};
