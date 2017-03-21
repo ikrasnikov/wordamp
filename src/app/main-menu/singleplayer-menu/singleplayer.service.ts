@@ -8,14 +8,11 @@ export class SingleplayerService {
 
   public setUserNameAtLocalStorage(name: string): void {
     let currentName: string = this._localStorage.getLocalStorageValue("username");
-    let setValueUsername: string = "";
+    let setValueUsername: string = name;
 
-    if (name === "") {
-      setValueUsername = "Anonimous";
-    } else if (name !== currentName) {
-      setValueUsername = name;
-    }
-
+     if (name === "") {
+       setValueUsername = "Anonimous";
+     }
     this._localStorage.setLocalStorageValue("username", setValueUsername);
 
   }

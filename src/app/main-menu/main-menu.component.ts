@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { CreateGameService } from "./create-game.service";
 import { LocalStorageService } from "../local-storage.service";
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 import { AngularFire } from 'angularfire2';
 import { Subscription } from "rxjs";
+import { JoinGameService } from "./join-game.service";
 
 @Component({
   selector: 'app-main-menu',
@@ -19,8 +20,8 @@ export class MainMenuComponent {
   public shareAbleLink: string = "";
   private _waitForUserSubscriber: Subscription;
 
-
   constructor(private _creategameService: CreateGameService,
+    private _joingameService: JoinGameService,
     private _router: Router,
     private _activatedRoute: ActivatedRoute,
     private _localSrorage: LocalStorageService,
@@ -29,11 +30,18 @@ export class MainMenuComponent {
     this.isNewUser = this._checkIsNewUser();
     this.isMainMenuPage = this._getUrlActivatedRoute();
 
-
     //if user created a multiplayer game
     this._waitForUserSubscriber = this._creategameService.waitForSecondUserMultiplayer.subscribe((id) => {
       this.isWait = true;
       this.shareAbleLink = this._creategameService.getShariableLink(id);
+      
+       let room: Subscription = this._af.database.object(`rooms/${id}`).subscribe(data => {
+        if (data.$value !== null && data.users.length === 2) {
+          room.unsubscribe();
+          //this._router.navigate(['playzone', id]);
+           console.log("game start");
+        }
+      });
     });
 
     // event on starting game
@@ -44,6 +52,15 @@ export class MainMenuComponent {
     });
 
   }
+
+  ngOnInit() {
+     this._activatedRoute.params.forEach((param: Params) => {
+      let idRoom:number = param['id'];
+        if (idRoom) {
+          this._joingameService.doIfShareableLinkIsActivated(idRoom);
+        }
+    });
+   }
 
   public hideIntroForUser(): void {
     this.isMainMenuPage = false;
@@ -72,3 +89,9 @@ export class MainMenuComponent {
   }
 
 }
+
+
+
+
+
+

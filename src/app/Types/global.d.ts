@@ -20,3 +20,10 @@ type TInputData = {
     difficulty:string,
     username:string
 };
+
+type TOutputData = {
+    difficulty: {src: string}[],
+    id: string,
+    language: string,
+    player: string
+};

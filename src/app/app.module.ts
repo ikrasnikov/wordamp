@@ -13,9 +13,12 @@ import { SingleplayerMenuComponent } from './main-menu/singleplayer-menu/singlep
 import { SingleplayerService } from "./main-menu/singleplayer-menu/singleplayer.service";
 
 import { MultiplayerMenuComponent } from  './main-menu/multiplayer-menu/multiplayer-menu.component';
-import { AppComponent } from './app.component';
-import { LocalStorageService } from "./local-storage.service";
+import { MultiplayerService } from "./main-menu/multiplayer-menu/multiplayer.service";
 
+import { LocalStorageService } from "./local-storage.service";
+import { JoinGameService } from "./main-menu/join-game.service"
+
+import { AppComponent } from './app.component';
 
 const routes = [
    {
@@ -27,6 +30,9 @@ const routes = [
       {
         path: 'multi', component: MultiplayerMenuComponent
       }]
+  },
+  {
+    path: "mainmenu/multi/:id", component: MainMenuComponent
   },
   {
     path: '',
@@ -50,7 +56,7 @@ const routes = [
     AngularFireModule.initializeApp(firebaseConfig),
     RouterModule.forRoot(routes),
   ],
-  providers: [CreateGameService, SingleplayerService, LocalStorageService],
+  providers: [CreateGameService, SingleplayerService, LocalStorageService, MultiplayerService, JoinGameService],
   bootstrap: [AppComponent],
 })
 export class AppModule { }
