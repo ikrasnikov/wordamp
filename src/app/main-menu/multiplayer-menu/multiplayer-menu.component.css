@@ -1,0 +1,75 @@
+* {
+   font-size: 1.1em;
+}
+/******Table********/
+.table-wrap {
+  width: 100%;
+  height: 580px;
+  overflow: auto;
+  margin-top: 30px;
+}
+.table {
+  width: 75%;
+  margin: 20px auto;  
+}
+.table .data:hover {
+  background: rgba(49, 176, 213, 0.7);
+}
+.data:hover td{
+     color:#fff !important;
+     font-weight: bold;
+}
+/******Difficulty********/
+.stars {
+    display: inline;
+}
+.stars img {
+    width: 35px;
+    height: 35px;
+}
+/******Language********/
+.lang div {
+  width: 70px;
+  height: 30px;
+  position: relative;
+  margin-left: 10px;
+  display: inline-block;
+  
+}
+.lang div:before, .lang div:after {
+  content: "";
+  position: absolute;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  -webkit-box-shadow: 0 0 6px 2px rgba(0,0,0,0.5) ;
+  box-shadow: 0 0 6px 2px rgba(0,0,0,0.5) ;
+}
+.lang div:before {
+  left:0;
+}
+.lang div:after {
+  left:25px;
+}
+.de_ru:before{
+  background: url("/assets/img/icons/germany.svg");
+}
+.de_ru:after{
+  background: url("/assets/img/icons/russia.svg");
+}
+.en_de:before{
+  background: url("/assets/img/icons/united-kingdom.svg");
+}
+.en_de:after{
+  background: url("/assets/img/icons/germany.svg");
+}
+.en_ru:before{
+  background: url("/assets/img/icons/united-kingdom.svg");
+}
+.en_ru:after{
+  background: url("/assets/img/icons/russia.svg");
+}
+/**** btn join ***********/
+button.join {
+    padding: 5px 40px;
+}

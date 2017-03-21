@@ -17,8 +17,6 @@ export class CreateGameService {
   public startPlayingGame: Subject<number>;
   public waitForSecondUserMultiplayer: Subject<number>;
 
-
-
   constructor(private _af: AngularFire) {
     this.startPlayingGame = new Subject();
     this.waitForSecondUserMultiplayer = new Subject();
