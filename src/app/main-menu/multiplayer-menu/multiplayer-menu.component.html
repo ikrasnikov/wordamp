@@ -1,0 +1,30 @@
+<div class="table-wrap">
+  <table class="table table-hover " *ngIf="rooms.length > 0">
+    <thead>
+      <tr>
+        <th>Player</th>
+        <th>Languages</th>
+        <th>Difficulty</th>
+        <th>Join</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <tr class="default data" *ngFor="let item of rooms">
+        <td>{{item.player}}</td>
+        <td>
+          <div class="lang">
+            <div [class]="item.language"></div>
+          </div>
+        </td>
+        <td>
+          <div  class="stars" *ngFor="let img of item.difficulty">
+            <img [src]="img.src">
+          </div>
+        </td>
+        <td><button class="btn btn-success join" (click)="startGame(item.id)">Join</button></td>
+      </tr>
+    
+    </tbody>
+  </table>
+</div>
