@@ -38,8 +38,7 @@ export class MainMenuComponent {
        let room: Subscription = this._af.database.object(`rooms/${id}`).subscribe(data => {
         if (data.$value !== null && data.users.length === 2) {
           room.unsubscribe();
-          //this._router.navigate(['playzone', id]);
-           console.log("game start");
+          this._router.navigate(['playzone', id]);
         }
       });
     });
@@ -47,8 +46,7 @@ export class MainMenuComponent {
     // event on starting game
     let startGameSubscriber: Subscription = this._creategameService.startPlayingGame.subscribe((id) => {
       startGameSubscriber.unsubscribe();
-      // this._router.navigate(['playzone', id]);  // send user  on game-field
-      console.log("game start");
+       this._router.navigate(['playzone', id]);  // send user  on game-field
     });
 
   }
