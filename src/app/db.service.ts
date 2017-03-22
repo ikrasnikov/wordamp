@@ -15,4 +15,9 @@ export class DBService {
     return this._af.database.object(`rooms/${id}`).update({cards: cards, activeCards: activeCards, users: users, countHiddenBlock: countHiddenBlock });
   }
 
+  public deleteRoom(id){
+    return this._af.database.object(`rooms/${id}`).remove();
+
+  }
+
 }
