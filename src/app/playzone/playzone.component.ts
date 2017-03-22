@@ -34,7 +34,7 @@ export class PlayzoneComponent implements OnDestroy {
   ngOnDestroy(): void {
     this.startGameSubscriber.unsubscribe();
     this.updateFieldSubscriber.unsubscribe();
-    if (this.field) this._gamePlayService.destroy();
+    if (this.field) this._gamePlayService.removeSubscriptions();
   }
 
 

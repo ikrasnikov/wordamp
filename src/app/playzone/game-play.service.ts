@@ -81,7 +81,7 @@ export class GamePlayService {
   private _updateLocalState(data): void {
 
     if (!data.cards) {
-      this.destroy();
+      this.removeSubscriptions();
       this._router.navigate([`mainmenu/`]);
       return;
     }
@@ -218,14 +218,14 @@ export class GamePlayService {
 
 
   public endGame() {
-    this.destroy();
+    this.removeSubscriptions();
     this._dbService.updateStateOnFireBase(this._roomId, this._cards, [], this._users, this.countHiddenBlock)
       .then(() => this._router.navigate([`playzone/${this._roomId}/result`]));
 
   }
 
 
-  public destroy() {
+  public removeSubscriptions() {
     this._roomSubscriber.unsubscribe();
     this.streamFromFirebase.unsubscribe();
   }
