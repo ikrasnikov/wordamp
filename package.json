@@ -8,7 +8,8 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "deploy" : "./node_modules/.bin/deploy"
   },
   "private": true,
   "dependencies": {
@@ -27,6 +28,7 @@
     "bootstrap": "^3.3.7",
     "core-js": "2.4.1",
     "firebase": "^3.7.0",
+    "ng-deploy-gh-pages": "0.0.5",
     "rxjs": "5.1.0",
     "zone.js": "0.7.6"
   },

@@ -2,7 +2,7 @@ import { Subscription, Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { DBService } from '../db.service';
 import { Router } from '@angular/router';
-import { MultiplayerService } from "../main-menu/multiplayer-menu/multiplayer.service";
+import { SidebarService } from './sidebar/sidebar.service'
 
 @Injectable()
 export class GamePlayService {
@@ -13,12 +13,11 @@ export class GamePlayService {
   private _gameType: string;
   private _activeCards: TCard[];
 
-  public currentName: string;
-  public currentScore: number;
   public countHiddenBlock: number;
   private _currentUser: TUser;
   private _timerId: any;
   private _roomSubscriber: Subscription;
+  private _timeSubscriber: Subscription;
 
   public startGame: Subject<any>;
   public updateField: Subject<any>;
@@ -27,7 +26,8 @@ export class GamePlayService {
 
   constructor(
     private _dbService: DBService,
-    private _router: Router) {
+    private _router: Router,
+    private _sidebarService: SidebarService,) {
     this.startGame = new Subject();
     this.updateField = new Subject();
   }
@@ -44,9 +44,10 @@ export class GamePlayService {
           return;
         } else {
           this._initData(data);
+          this._initSidebar(data);
+          this._roomSubscriber = this.streamFromFirebase.subscribe((res) => this._updateLocalState(res));
         }
         firstDataSubscriber.unsubscribe();
-        this._roomSubscriber = this.streamFromFirebase.subscribe((res) => this._updateLocalState(res));
       });
 
     let roomSubscriberForFistData = this._dbService.getObjectFromFB(`rooms/${roomId}`)
@@ -60,6 +61,7 @@ export class GamePlayService {
     this._users = data.users;
     this._gameType = data.type;
     this.countHiddenBlock = data.countHiddenBlock;
+    this._activeCards = data.activeCards || [];
     let localUser: number = +localStorage["userid"];
 
     data.users.forEach(user => {
@@ -76,6 +78,28 @@ export class GamePlayService {
 
   }
 
+  private _initSidebar(data) {
+
+    this._sidebarService.initSidebar(data);
+
+    this._timeSubscriber = this._sidebarService.timeIsUp.subscribe(() => {
+
+      if (this._gameType === 'single') {
+        this.endGame();
+      }
+      else if (this._gameType === 'multi') {
+        this._currentUser.score -= 5;
+        this._changeUserScore();
+
+
+        this._users.forEach(user => user.isActive = !user.isActive);
+        this._activeCards.forEach( card => card.isOpen = false );
+
+        this._dbService.updateStateOnFireBase(this._roomId, this._cards, this._activeCards, this._users, this.countHiddenBlock);
+      }
+    });
+
+  }
 
 
   private _updateLocalState(data): void {
@@ -93,6 +117,7 @@ export class GamePlayService {
     this.countHiddenBlock = data.countHiddenBlock;
 
     this.updateActivityForCurrentUser(data.users);
+    this._sidebarService.changeUserState(data.users);
     this._changeStateByOpendCards(activeCards);
 
     this.updateField.next({
@@ -108,6 +133,10 @@ export class GamePlayService {
       case 0:
         if (!this._currentUser.isActive) {
           this._updateCards(activeCards);
+        }
+        if (this._gameType === 'multi') {
+          this._sidebarService.stopTimer();
+          this._sidebarService.startTimer();
         }
         break;
       case 1:
@@ -219,8 +248,9 @@ export class GamePlayService {
 
   public endGame() {
     this.removeSubscriptions();
+    this._sidebarService.stopTimer();
     this._dbService.updateStateOnFireBase(this._roomId, this._cards, [], this._users, this.countHiddenBlock)
-      .then(() => this._router.navigate([`playzone/${this._roomId}/result`]));
+      .then(() => console.log("Result")) /*this._router.navigate([`playzone/${this._roomId}/result`]));*/
 
   }
 

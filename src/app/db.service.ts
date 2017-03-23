@@ -16,6 +16,7 @@ export class DBService {
     return this._af.database.object(`rooms/${id}`).update({cards: cards, activeCards: activeCards, users: users, countHiddenBlock: countHiddenBlock });
   }
 
+
   public getAllMultiPlayerRoom(): FirebaseListObservable<any> {
     const queryObservable = this._af.database.list(`rooms`, {
         query: {
@@ -25,6 +26,10 @@ export class DBService {
     });
 
     return queryObservable;
+  }
+  
+  public deleteRoom(id){
+    return this._af.database.object(`rooms/${id}`).remove();
   }
 
 }
