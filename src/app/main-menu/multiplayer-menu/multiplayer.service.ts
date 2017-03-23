@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { FirebaseListObservable, AngularFire } from 'angularfire2';
 
 @Injectable()
 export class MultiplayerService {
@@ -10,18 +9,8 @@ export class MultiplayerService {
     {src: "assets/img/star.png"}
   ];
 
-  constructor(private _af : AngularFire) {}
+  constructor() {}
 
-  public getAllMultiPlayersFromRooms(): FirebaseListObservable<any> {
-    const queryObservable = this._af.database.list(`rooms`, {
-        query: {
-        orderByChild: "type",
-        equalTo: "multi"
-      }
-    });
-
-    return queryObservable;
-  }
 
   public isItemExistsInCurrentArray(item:any, array: TOutputData[]):boolean {
     let isSame: boolean = false;

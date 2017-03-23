@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { SIZE } from '../constants';
 import { Subscription, Subject } from "rxjs";
+import { DBService } from '../db.service';
 
 import { AngularFire, FirebaseObjectObservable } from 'angularfire2';
 
@@ -17,11 +18,11 @@ export class CreateGameService {
   public startPlayingGame: Subject<number>;
   public waitForSecondUserMultiplayer: Subject<number>;
 
-  constructor(private _af: AngularFire) {
+  constructor(private _dbService: DBService) {
     this.startPlayingGame = new Subject();
     this.waitForSecondUserMultiplayer = new Subject();
 
-    this._createRoomOnFirebase = this._af.database.object("rooms");
+    this._createRoomOnFirebase = this._dbService.getObjectFromFB("rooms");
   }
 
   public makePlayZone({ languages, difficulty, username, type }): void {
@@ -32,11 +33,11 @@ export class CreateGameService {
     let idRoom: number = this._getGeneratedIdForRoom();
 
 
-    this._af.database.object(`/dictionary/${lang1}`)
+    this._dbService.getObjectFromFB(`/dictionary/${lang1}`)
       .map(res => {
         this._firstLanguageArray = res;
       })
-      .switchMap(event => this._af.database.object(`/dictionary/${lang2}`))
+      .switchMap(event => this._dbService.getObjectFromFB(`/dictionary/${lang2}`))
       .map(res => {
         this._lastLanguageArray = res;
       })

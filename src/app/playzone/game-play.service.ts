@@ -50,7 +50,7 @@ export class GamePlayService {
         firstDataSubscriber.unsubscribe();
       });
 
-    let roomSubscriberForFistData = this._dbService.getRoomByIdFromFB(roomId)
+    let roomSubscriberForFistData = this._dbService.getObjectFromFB(`rooms/${roomId}`)
       .subscribe(this.streamFromFirebase);
 
   }
