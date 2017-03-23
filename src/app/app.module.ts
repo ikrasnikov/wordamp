@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { AngularFireModule } from 'angularfire2';
 import { firebaseConfig } from './firebase.config';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 import { MainMenuComponent } from './main-menu/main-menu.component';
@@ -17,10 +17,12 @@ import { MultiplayerService } from "./main-menu/multiplayer-menu/multiplayer.ser
 
 import { PlayzoneComponent } from './playzone/playzone.component';
 import { GamePlayService } from "./playzone/game-play.service";
+import { SidebarComponent } from './playzone/sidebar/sidebar.component'
 
 import { LocalStorageService } from "./local-storage.service";
 import { DBService } from './db.service';
 import { JoinGameService } from "./main-menu/join-game.service"
+import { SidebarService } from "./playzone/sidebar/sidebar.service";
 
 import { AppComponent } from './app.component';
 
@@ -52,9 +54,10 @@ const routes = [
   declarations: [
     AppComponent,
     MainMenuComponent,
-     PlayzoneComponent,
+    PlayzoneComponent,
     MultiplayerMenuComponent,
-    SingleplayerMenuComponent
+    SingleplayerMenuComponent,
+    SidebarComponent
   ],
   imports: [
     BrowserModule,
@@ -64,7 +67,7 @@ const routes = [
     AngularFireModule.initializeApp(firebaseConfig),
     RouterModule.forRoot(routes),
   ],
-  providers: [CreateGameService, SingleplayerService, LocalStorageService, MultiplayerService, JoinGameService, GamePlayService, DBService],
+  providers: [CreateGameService, SingleplayerService, LocalStorageService, MultiplayerService, JoinGameService, GamePlayService, DBService, SidebarService],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

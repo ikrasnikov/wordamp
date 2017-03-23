@@ -1,0 +1,31 @@
+<div class="row sidebar">
+
+  <div *ngIf="!multi" class="col-md-4 col-sm-4 col-xs-3">
+    <strong>User name: {{firstUser.name}}</strong>
+  </div>
+  <div *ngIf="!multi" class="col-md-4 col-sm-3 col-xs-3">
+    <strong>Score: <strong class="score">{{firstUser.score}}</strong></strong>
+  </div>
+
+  <div *ngIf="multi">
+    <div  class="col-md-4 col-sm-4 col-xs-3 multi name-container">
+      <div *ngIf="firstUser.isActive" class="circle-p1"></div><p><strong>Player 1: {{firstUser.name}}</strong></p>
+      <div *ngIf="secondUser.isActive" class="circle-p2"></div><p><strong>Player 2: {{secondUser.name}}</strong></p>
+    </div>
+    <div class="col-md-4 col-sm-3 col-xs-3 multi">
+      <p><strong>Score: </strong><strong class="score">{{firstUser.score}}</strong></p>
+      <p><strong>Score: </strong><strong class="score">{{secondUser.score}}</strong></p>
+    </div>
+  </div>
+
+  <div class="col-md-2 col-sm-2 col-xs-3">
+    <strong>Time: {{time}}</strong>
+  </div>
+
+  <div class="col-md-2 col-sm-3 col-xs-3">
+    <button class="btn btn-lg btn-info" (click)="goToMainMenu()">Main menu</button>
+  </div>
+
+
+</div>
+
