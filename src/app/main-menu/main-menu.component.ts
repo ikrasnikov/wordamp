@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CreateGameService } from "./create-game.service";
 import { LocalStorageService } from "../local-storage.service";
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import { AngularFire } from 'angularfire2';
+import { DBService } from '../db.service';
 import { Subscription } from "rxjs";
 import { JoinGameService } from "./join-game.service";
 
@@ -25,7 +25,8 @@ export class MainMenuComponent {
     private _router: Router,
     private _activatedRoute: ActivatedRoute,
     private _localSrorage: LocalStorageService,
-    private _af: AngularFire) {
+    private _dbService: DBService
+    ) {
 
     this.isNewUser = this._checkIsNewUser();
     this.isMainMenuPage = this._getUrlActivatedRoute();
@@ -35,7 +36,7 @@ export class MainMenuComponent {
       this.isWait = true;
       this.shareAbleLink = this._creategameService.getShariableLink(id);
       
-       let room: Subscription = this._af.database.object(`rooms/${id}`).subscribe(data => {
+       let room: Subscription = this._dbService.getObjectFromFB(`rooms/${id}`).subscribe(data => {
         if (data.$value !== null && data.users.length === 2) {
           room.unsubscribe();
           this._router.navigate(['playzone', id]);
@@ -79,7 +80,7 @@ export class MainMenuComponent {
 
   public goToMainMenu(): void {
     let array: string[] = this.shareAbleLink.split("/");
-    this._af.database.object(`rooms/${array[array.length - 1]}`).remove()
+    this._dbService.getObjectFromFB(`rooms/${array[array.length - 1]}`).remove()
       .then(() => {
         this.isWait = false;
         this._router.navigate(['mainmenu/single']);
