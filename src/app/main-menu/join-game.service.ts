@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { CreateGameService } from "./create-game.service";
-import { FirebaseListObservable, AngularFire } from 'angularfire2';
 import { LocalStorageService } from "../local-storage.service";
 import { Subscription } from "rxjs";
+import { DBService } from '../db.service';
 
 @Injectable()
 export class JoinGameService {
    public getValueFromFormSubscribe;
 
-   constructor(private _af : AngularFire,
+   constructor(private _dbService: DBService,
               private _createGameService: CreateGameService,
               private _localSrorage: LocalStorageService) {}
 
@@ -18,11 +18,11 @@ export class JoinGameService {
 
     let currentUser: TUser;
 
-    let roomSubscribe: Subscription = this._af.database.object(`rooms/${idRoom}`).subscribe((data) => {
+    let roomSubscribe: Subscription = this._dbService.getObjectFromFB(`rooms/${idRoom}`).subscribe((data) => {
             currentUser = data.users[0];
             roomSubscribe.unsubscribe();
 
-           this._af.database.object(`rooms/${idRoom}`).update({users: [currentUser, newUser], state: true})
+           this._dbService.getObjectFromFB(`rooms/${idRoom}`).update({users: [currentUser, newUser], state: true})
             .then(() => this._createGameService.startPlayingGame.next(idRoom));
       });
   }
@@ -35,7 +35,7 @@ export class JoinGameService {
  public doIfShareableLinkIsActivated(roomId: number): void {
    console.log("share", roomId);
 
-    let shareLink: Subscription = this._af.database.object(`rooms/${roomId}`).subscribe(data => {
+    let shareLink: Subscription = this._dbService.getObjectFromFB(`rooms/${roomId}`).subscribe(data => {
       if (data.users.length === 1) {
         shareLink.unsubscribe();
         this._localSrorage.setLocalStorageValue("userid", "1");

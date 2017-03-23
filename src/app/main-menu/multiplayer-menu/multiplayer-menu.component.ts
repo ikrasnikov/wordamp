@@ -3,6 +3,7 @@ import { MultiplayerService } from "./multiplayer.service";
 import { LocalStorageService } from "../../local-storage.service";
 import { Subscription } from "rxjs";
 import { JoinGameService } from "../join-game.service";
+import { DBService } from '../../db.service';
 
 
 @Component({
@@ -17,9 +18,10 @@ export class MultiplayerMenuComponent implements OnInit {
 
   constructor(private _multiService: MultiplayerService,
               private _joingameService: JoinGameService,
-              private _localSrorage: LocalStorageService) {
+              private _localSrorage: LocalStorageService,
+              private _dbService: DBService) {
 
-   this.subscribe = this._multiService.getAllMultiPlayersFromRooms().subscribe(data => {
+   this.subscribe = this._dbService.getAllMultiPlayerRoom().subscribe(data => {
       this.rooms  =
         data.filter(item => {
                 if (item.users.length < 2 && !this._multiService.isItemExistsInCurrentArray(item, this.rooms))  return item;
@@ -31,8 +33,7 @@ export class MultiplayerMenuComponent implements OnInit {
 
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   public startGame(idRoom: number):void {
     this._joingameService.getValueFromFormSubscribe.unsubscribe();

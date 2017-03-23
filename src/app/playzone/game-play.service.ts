@@ -49,7 +49,7 @@ export class GamePlayService {
         this._roomSubscriber = this.streamFromFirebase.subscribe((res) => this._updateLocalState(res));
       });
 
-    let roomSubscriberForFistData = this._dbService.getRoomByIdFromFB(roomId)
+    let roomSubscriberForFistData = this._dbService.getObjectFromFB(`rooms/${roomId}`)
       .subscribe(this.streamFromFirebase);
 
   }
