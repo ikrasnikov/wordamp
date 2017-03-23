@@ -27,3 +27,13 @@ type TOutputData = {
     language: string,
     player: string
 };
+
+type TStoreData =  {
+  cards: TCard,
+  type: string,
+  state: boolean,
+  difficulty: string,
+  languages: string,
+  users: TUser[],
+  countHiddenBlock: number
+};
