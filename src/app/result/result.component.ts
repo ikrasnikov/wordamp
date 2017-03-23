@@ -49,7 +49,7 @@ export class ResultComponent implements OnInit {
       this._roomId = param['id'];
     });
 
-    this._roomObservable = this._dbService.getRoomByIdFromFB(this._roomId);
+    this._roomObservable = this._dbService.getObjectFromFB(`rooms/${this._roomId}`);
     this._room = this._roomObservable.subscribe(data=> {
 
       if (data.$value === null) {
