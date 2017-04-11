@@ -1,14 +1,29 @@
+/****loading********/
+.loading {
+ padding-top: 20%;
+}
+h1.greeting {
+ font-size: 3em;
+}
+img.gretting-img {
+margin-left: 50%;
+ transform: translateX(-50%);
+}
+/****main******/
+
 h1 {
   font-size: 2.5em;
 }
 .start_box {
   min-height: 500px;
+  margin-top: 5%;
 }
 /*******name*******/
 div.name {
   margin: 0 auto;
   padding-top: 1%;
   padding-bottom: 1%;
+  margin-top: 4%;
 }
 div.name label {
    font-size: 1.5em;
@@ -16,7 +31,11 @@ div.name label {
    line-height: 38px;
    padding: 0;
    text-align: right;
-   margin-left: -15px;
+   /*margin-left: -15px;*/
+}
+.refresh {
+
+    width: 40px;
 }
 /*****intro******/
 .intro span, .intro h2 {
@@ -40,8 +59,8 @@ div.name label {
  }
 
 div.select-step .btn {
- margin: 2% 15px 2% 15px;
- width: 40%;
+ margin: 1% 15px 0 15px;
+ width: 20%;
 }
 div.select-step .btn-center {
  margin-left: 50%;
@@ -62,6 +81,9 @@ div.select-step .btn-center {
   div.name, .next-step {
      margin-top: 2%;
   }
+  .refresh {
+    width: 35px;
+}
 }
 @media screen and (max-width: 850px)  {
     div.select-step .btn { 
@@ -80,7 +102,7 @@ div.select-step .btn-center {
      font-size: .8em;
      padding-right: 5px;
      padding-left: 15px;
-     text-align: left;
+     text-align: center;
      margin-left: 0px;
   }
   .intro-gif {
@@ -96,6 +118,19 @@ div.select-step .btn-center {
   h1 {
     font-size: 2em;
   }
+  h1.greeting {
+    font-size: 2.5em;
+  }
+  div.select-step .btn {
+    margin-bottom: 4%;
+  }
+  .refresh {
+    width: 30px;
+    margin-left: -15px;
+ }
+ img.gretting-img { 
+     width: 150px;
+ }
 }
 @media screen and (max-width: 320px)  {
   h1{
@@ -109,5 +144,8 @@ div.select-step .btn-center {
   }
   input, div.name label {
       font-size: .7em;
+  }
+   h1.greeting {
+    font-size: 2em;
   }
 }

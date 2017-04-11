@@ -14,11 +14,18 @@ export class IntroductionComponent {
 
   public isOpenVideoIntro:boolean;
   public userName :string;
+  public isLoading: boolean;
+  public toggleIntroInner = "Show introduction↓";
 
   constructor(private _createGameService: CreateGameService,
               private _localStorage: LocalStorageService,
               private _introService: IntroductionService,
               private _router: Router) {
+    this.isLoading = true;
+    let timeDuration: number = Math.random() * 3;
+    setTimeout(()=> {
+        this.isLoading = false;
+    }, timeDuration*1000);
                
     this.isOpenVideoIntro = false;
     this.userName = this._introService.setDefaultName();
@@ -27,7 +34,7 @@ export class IntroductionComponent {
 
   public showVideo(event:Event): void {
     this.isOpenVideoIntro = !this.isOpenVideoIntro;
-    (event.target as HTMLElement).innerHTML = (this.isOpenVideoIntro)? "Hide intro video↑": "Show intro video↓";
+    this.toggleIntroInner = (this.isOpenVideoIntro)? "Hide introduction↑": "Show introduction↓";
     this._introService.animate(
       {duration: 1000,
         timing: function(timeFraction) {
@@ -66,4 +73,7 @@ export class IntroductionComponent {
     this._sendUserTo('mainmenu');
   }
 
+  public updateName(): void {
+    this.userName = this._introService.setDefaultName();
+  }
 }
