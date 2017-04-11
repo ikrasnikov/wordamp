@@ -20,6 +20,10 @@ div.name label {
    text-align: right;
    /*margin-left: -15px;*/
 }
+.refresh {
+
+    width: 40px;
+}
 /*****intro******/
 .intro span, .intro h2 {
    font-size: 1.8em;
@@ -64,6 +68,9 @@ div.select-step .btn-center {
   div.name, .next-step {
      margin-top: 2%;
   }
+  .refresh {
+    width: 35px;
+}
 }
 @media screen and (max-width: 850px)  {
     div.select-step .btn { 
@@ -101,6 +108,10 @@ div.select-step .btn-center {
   div.select-step .btn {
     margin-bottom: 4%;
   }
+  .refresh {
+    width: 30px;
+    margin-left: -15px;
+ }
 }
 @media screen and (max-width: 320px)  {
   h1{

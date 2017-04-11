@@ -66,4 +66,7 @@ export class IntroductionComponent {
     this._sendUserTo('mainmenu');
   }
 
+  public updateName(): void {
+    this.userName = this._introService.setDefaultName();
+  }
 }
