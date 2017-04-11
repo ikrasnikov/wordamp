@@ -10,7 +10,34 @@ export class IntroductionService {
     "Donald Duc", "Crazy Cow", "Batman",
     "Кэп", "Harry Potter", "Jolly Rodger",
     "Scrooge McDuck", "Orange", "Lord Braine",
-    "Dr. Hurt"];
+    "Dr. Hurt", 'Spanky','Animal','Hambone',
+    'Lumpy','Spum','T- Money','Toastmaster',
+    'Buzzy','Wheezy','Quarter','Jimmy Seepage',
+    'White Stuff','Burning Ooz','Bagel','Poindexter',
+    'Breezy','Imposter Drew','Butters','Pack O’ Smokes',
+    'Vixen','Muffin Man','Nitro','MilkMan','Joel the Hole',
+    'Memory Jones','Drunk Jason','Lefty','Yaworm',
+    'Big Stinky Pete','Saudi','Jewman','Hat Chris',
+    'The AssMan','Kokomo','Bondo','Girth','The Dirty Mexican',
+    'Russhole','Coop','Noah','Dirty Bird','ShoeShine',
+    'Stoffer','Daytrader','Digger','Sparky',
+    'Obi-Wan','Silent Chris','Boarder Chris',
+    'Scoot McGoot','Sambo','FM','Tangy','Big daddy','Bon-bon',
+    'Hero','Bumblebee','Chico','Champ','Cherubic',
+    'Cutie wootie','Dawg','Dreamboat','Honey bunch',
+    'Hot chocolate','Boo-boo','Dumpling','Egghead',
+    'Rock star','Tarzan','Tiger','Tiger toes',
+    'Hottie','Huggy bear','HunkJumbo','Lamsie pamsie',
+    'Little soldier','Chocoboy','Chunkie wunkie','Monkey buns',
+    'Mr. Bones','Mr. Foo-Foo','Casanova','Loveboy','Lover boy',
+    'Picklehead','Shnookums','Smoochy','Snuggles','Pooh bear',
+    'Tyrone','Uncle Tom','Velcro Head','Jigga','Jiggaboo',
+    'Jigroid','Jungle bunny','Kaffir','Mud Puppy','Mud Shark',
+    'Negro','Negroid','Porker','Lard a','Cottage cheese thighs',
+    'Blimp','Butter ball','Fat-a-potamis','Trouser destroyer',
+    'fat','pig or swine','physically challenged','big butt',
+    'balloon','gas filled','God zilla'];
+    
    public getLangEmit:EventEmitter<any>;
     
 
