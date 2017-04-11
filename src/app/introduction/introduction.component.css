@@ -47,10 +47,6 @@ div.select-step .btn-center {
  margin-left: 50%;
  transform: translateX(-50%);
 }
-
-/*div.select-step {
-  padding: 1% 0 1% 0;
-}*/
 /*****video*****/
 .intro-gif {
   width: 50%;
@@ -82,7 +78,6 @@ div.select-step .btn-center {
   }
   div.name label {
      font-size: .8em;
-     /*line-height: 38px;*/
      padding-right: 5px;
      padding-left: 15px;
      text-align: left;
