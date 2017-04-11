@@ -6,7 +6,7 @@ h1.greeting {
  font-size: 3em;
 }
 img.gretting-img {
-margin-left: 50%;
+ margin-left: 50%;
  transform: translateX(-50%);
 }
 /****main******/
@@ -59,12 +59,11 @@ div.name label {
  }
 
 div.select-step .btn {
- margin: 1% 15px 0 15px;
+ margin-top: 1%;
  width: 20%;
 }
-div.select-step .btn-center {
- margin-left: 50%;
- transform: translateX(-50%);
+div.select-step div {
+ text-align: center;
 }
 /*****video*****/
 .intro-gif {
