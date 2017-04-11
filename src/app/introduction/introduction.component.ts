@@ -27,7 +27,7 @@ export class IntroductionComponent {
 
   public showVideo(event:Event): void {
     this.isOpenVideoIntro = !this.isOpenVideoIntro;
-    (event.target as HTMLElement).innerHTML = (this.isOpenVideoIntro)? "Hide intro video↑": "Show intro video↓";
+    (event.target as HTMLElement).innerHTML = (this.isOpenVideoIntro)? "Hide introduction↑": "Show introduction↓";
     this._introService.animate(
       {duration: 1000,
         timing: function(timeFraction) {
