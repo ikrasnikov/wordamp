@@ -14,11 +14,17 @@ export class IntroductionComponent {
 
   public isOpenVideoIntro:boolean;
   public userName :string;
+  public isLoading: boolean;
 
   constructor(private _createGameService: CreateGameService,
               private _localStorage: LocalStorageService,
               private _introService: IntroductionService,
               private _router: Router) {
+    this.isLoading = true;
+    let timeDuration: number = Math.random() * 3;
+    setTimeout(()=> {
+        this.isLoading = false;
+    }, timeDuration*1000);
                
     this.isOpenVideoIntro = false;
     this.userName = this._introService.setDefaultName();

@@ -1,3 +1,16 @@
+/****loading********/
+.loading {
+ padding-top: 20%;
+}
+h1.greeting {
+ font-size: 3em;
+}
+img.gretting-img {
+margin-left: 50%;
+ transform: translateX(-50%);
+}
+/****main******/
+
 h1 {
   font-size: 2.5em;
 }
@@ -105,12 +118,18 @@ div.select-step .btn-center {
   h1 {
     font-size: 2em;
   }
+  h1.greeting {
+    font-size: 2.5em;
+  }
   div.select-step .btn {
     margin-bottom: 4%;
   }
   .refresh {
     width: 30px;
     margin-left: -15px;
+ }
+ img.gretting-img { 
+     width: 150px;
  }
 }
 @media screen and (max-width: 320px)  {
@@ -125,5 +144,8 @@ div.select-step .btn-center {
   }
   input, div.name label {
       font-size: .7em;
+  }
+   h1.greeting {
+    font-size: 2em;
   }
 }
