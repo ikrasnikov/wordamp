@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { SIZE } from '../constants';
 import { Subscription, Subject } from "rxjs";
 import { DBService } from '../db.service';
+import { Router} from '@angular/router';
 
 import { AngularFire, FirebaseObjectObservable } from 'angularfire2';
 
@@ -18,7 +19,8 @@ export class CreateGameService {
   public startPlayingGame: Subject<number>;
   public waitForSecondUserMultiplayer: Subject<number>;
 
-  constructor(private _dbService: DBService) {
+  constructor(private _dbService: DBService,
+              private _router: Router) {
     this.startPlayingGame = new Subject();
     this.waitForSecondUserMultiplayer = new Subject();
 
@@ -28,9 +30,10 @@ export class CreateGameService {
   public makePlayZone({ languages, difficulty, username, type }): void {
     let score = 20;
     let size: { w: number, h: number } = SIZE[difficulty];
-    let [lang1, lang2] = languages.split('_');
+    let lang1:string = languages.first;
+    let lang2:string = languages.last;
     let cards: TCard[][] = [];
-    let idRoom: number = this._getGeneratedIdForRoom();
+    let idRoom: number = this.getGeneratedRandomId();
 
 
     this._dbService.getObjectFromFB(`/dictionary/${lang1}`)
@@ -48,9 +51,9 @@ export class CreateGameService {
         newRoom[idRoom] = { cards: cards, type: type, state: true, difficulty: difficulty, languages: languages, users: [{ name: username, score: score, id: 0, isActive: true, activity: true, result: 'lose' }], countHiddenBlock: 0 };
 
         this._createRoomOnFirebase.update(newRoom)          //send data to FireBase
-          .then(() => {
-            return (type === "single") ? this.startPlayingGame.next(idRoom) : this.waitForSecondUserMultiplayer.next(idRoom);
-            //send roomId to single.components.ts
+          .then(
+            () => {
+            this._router.navigate(['playzone', idRoom]);
           });
       });
   }
@@ -107,7 +110,7 @@ export class CreateGameService {
     return (item % 2 === 0) ? this._firstLanguageArray[wordId] : this._lastLanguageArray[wordId];
   }
 
-  private _getGeneratedIdForRoom(): number {
+  public getGeneratedRandomId(): number {
     return new Date().getTime();
   }
 

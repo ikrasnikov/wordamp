@@ -15,17 +15,20 @@ type TCard = {
 };
 
 type TInputData = {
-  type:string,
-  languages:string,
-  difficulty:string,
-  username:string
+    type:string,
+    languages: {
+        first: string,
+        last: string
+    },
+    difficulty:string,
+    username:string
 };
 
 type TOutputData = {
-  difficulty: {src: string}[],
-  id: string,
-  language: string,
-  player: string
+    difficulty: {src: string}[],
+    id: string,
+    language: string,
+    player: string
 };
 
 type TStoreData =  {
@@ -33,7 +36,10 @@ type TStoreData =  {
   type: string,
   state: boolean,
   difficulty: string,
-  languages: string,
+  languages: {
+        first: string,
+        last: string
+  },
   users: TUser[],
   countHiddenBlock: number
 };
