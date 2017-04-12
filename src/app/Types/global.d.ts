@@ -48,3 +48,8 @@ type TItemLang = {
     name: string,
     src: string
 };
+
+type TLanguages = {
+    first: TItemLang,
+    last: TItemLang
+};

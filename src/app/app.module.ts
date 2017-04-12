@@ -24,9 +24,14 @@ import { JoinGameService } from "./main-menu/join-game.service"
 import { SidebarService } from "./playzone/sidebar/sidebar.service";
 
 import { AppComponent } from './app.component';
-import { DropdownModule } from 'ng2-bootstrap';
+
 import { IntroductionComponent } from './introduction/introduction.component';
 import { IntroductionService } from './introduction/introduction.service';
+
+import { OptionsComponent } from './options/options.component';
+import { OptionsService } from './options/options.service';
+import { DropdownDirective } from './options/dropdown.directive';
+
 
 const routes = [
   {
@@ -58,6 +63,8 @@ const routes = [
     SidebarComponent,
     ResultComponent,
     IntroductionComponent,
+    OptionsComponent,
+    DropdownDirective,
   ],
   imports: [
     BrowserModule,
@@ -65,8 +72,7 @@ const routes = [
     ReactiveFormsModule,
     HttpModule,
     AngularFireModule.initializeApp(firebaseConfig),
-    RouterModule.forRoot(routes),
-    DropdownModule.forRoot()
+    RouterModule.forRoot(routes)
   ],
   providers: [
     CreateGameService,
@@ -76,7 +82,8 @@ const routes = [
     GamePlayService,
     DBService,
     SidebarService,
-    IntroductionService
+    IntroductionService,
+    OptionsService
   ],
   bootstrap: [AppComponent],
 })
