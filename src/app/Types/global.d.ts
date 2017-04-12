@@ -43,3 +43,8 @@ type TStoreData =  {
   users: TUser[],
   countHiddenBlock: number
 };
+
+type TItemLang = {
+    name: string,
+    src: string
+};
