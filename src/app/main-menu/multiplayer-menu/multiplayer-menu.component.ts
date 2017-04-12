@@ -37,11 +37,13 @@ export class MultiplayerMenuComponent implements OnDestroy {
 
 
   ngOnDestroy(){
-    this._createGameSubscriber.unsubscribe();
+    //this._createGameSubscriber.unsubscribe();
+     this.subscribe.unsubscribe();
   }
 
 
   public showOptions(){
+    console.log("show option => start");
    // this._optionsService.showOptions.emit('multi');
   }
 
@@ -61,7 +63,8 @@ export class MultiplayerMenuComponent implements OnDestroy {
   public joinGame(idRoom: number):void {
     this.subscribe.unsubscribe();
     sessionStorage['userid'] = this._createGameService.getGeneratedRandomId().toString();
-    this._joingameService.addUserToFireBase(idRoom);
+    //this._joingameService.addUserToFireBase(idRoom);
+    console.log("join to game");
   }
 
   public findRoomByUserName(e) {
@@ -78,6 +81,7 @@ export class MultiplayerMenuComponent implements OnDestroy {
   }
 
   public startMultiGame(): void {
+     this.subscribe.unsubscribe();
     sessionStorage['userid'] = this._createGameService.getGeneratedRandomId().toString();
     let options = JSON.parse(this._localSrorage.getLocalStorageValue("user"));
     options.type ="multi";
@@ -86,12 +90,7 @@ export class MultiplayerMenuComponent implements OnDestroy {
 
 
   public goToMainMenu(): void {
-     this._router.navigate(['mainmenu']);
-  }
-
-
-  public goToOptions(): void {
-     this._router.navigate(['options']);
+    this._router.navigate(['mainmenu']);
   }
 
 }
