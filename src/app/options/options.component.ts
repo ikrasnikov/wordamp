@@ -41,7 +41,7 @@ export class OptionsComponent implements OnDestroy {
               private _joinService: JoinGameService,
               private _optionsService: OptionsService) {
 
-    this.keyDownHandler = this._changeOptionsByKeyEvent.bind(this);
+    this.keyDownHandler = this._endingOfSettingsByKeyEvent.bind(this);
 
     this._showSubscriber = this._optionsService.showOptions
       .subscribe(gameType =>  {
@@ -80,7 +80,7 @@ export class OptionsComponent implements OnDestroy {
   }
 
 
-  public _changeOptionsByKeyEvent(event: Event): void {
+  private _endingOfSettingsByKeyEvent(event: Event): void {
     let code = (event as KeyboardEvent).keyCode;
     if (code === 13 || code === 27) {
       event.preventDefault();
@@ -118,7 +118,7 @@ export class OptionsComponent implements OnDestroy {
     (e.target as HTMLInputElement).select();
   }
 
-  public saveNameOfLang(e :Event) : void {
+  public saveNameOfLangByClickOnItem(e :Event) : void {
     let name: string = (e.target as HTMLElement).getAttribute("name");
     ((e.target as HTMLElement).getAttribute("data-order") === "first")? this.menuGame.value.languages.first = name: this.menuGame.value.languages.last = name;
      this._localSrorage.setLocalStorageValue("user", JSON.stringify(this.menuGame.value));
