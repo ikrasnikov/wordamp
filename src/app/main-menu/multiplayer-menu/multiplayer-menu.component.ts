@@ -6,7 +6,7 @@ import { JoinGameService } from "../join-game.service";
 import { DBService } from '../../db.service';
 import { CreateGameService } from "../create-game.service";
 import { Router} from '@angular/router';
-//import {OptionsService} from "../../options/options.service";
+import {OptionsService} from "../../options/options.service";
 
 @Component({
   selector: 'app-multiplayer-menu',
@@ -26,25 +26,24 @@ export class MultiplayerMenuComponent implements OnDestroy {
               private _createGameService: CreateGameService,
               private _router: Router,
               private _dbService: DBService,
-              //private _optionsService: OptionsService
+              private _optionsService: OptionsService
               ) {
 
-  // this._createGameSubscriber = this._optionsService.createMultiGame.
-  //   subscribe(() => this.startMultiGame());
+   this._createGameSubscriber = this._optionsService.createMultiGame.
+    subscribe(() => this.startMultiGame());
    this.imageOfLanguages = this._joingameService.imageOfLanguages;
    this._updateRooms();
   }
 
 
   ngOnDestroy(){
-    //this._createGameSubscriber.unsubscribe();
+    this._createGameSubscriber.unsubscribe();
      this.subscribe.unsubscribe();
   }
 
 
   public showOptions(){
-    console.log("show option => start");
-   // this._optionsService.showOptions.emit('multi');
+    this._optionsService.showOptions.emit('multi');
   }
 
 
@@ -63,8 +62,7 @@ export class MultiplayerMenuComponent implements OnDestroy {
   public joinGame(idRoom: number):void {
     this.subscribe.unsubscribe();
     sessionStorage['userid'] = this._createGameService.getGeneratedRandomId().toString();
-    //this._joingameService.addUserToFireBase(idRoom);
-    console.log("join to game");
+    this._joingameService.addUserToFireBase(idRoom);
   }
 
   public findRoomByUserName(e) {
