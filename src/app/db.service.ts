@@ -12,7 +12,7 @@ export class DBService {
   }
 
 
-  public updateStateOnFireBase(id: number, cards:TCard[][], activeCards:TCard[],  users: TUser[], countHiddenBlock){
+  public updateStateOnFireBase(id: number, cards:TCard[], activeCards:TCard[],  users: TUser[], countHiddenBlock){
     return this._af.database.object(`rooms/${id}`).update({cards: cards, activeCards: activeCards, users: users, countHiddenBlock: countHiddenBlock });
   }
 

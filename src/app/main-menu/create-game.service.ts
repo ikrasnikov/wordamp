@@ -32,7 +32,7 @@ export class CreateGameService {
     let size: { w: number, h: number } = SIZE[difficulty];
     let lang1:string = languages.first;
     let lang2:string = languages.last;
-    let cards: TCard[][] = [];
+    let cards: TCard[] = [];
     let idRoom: number = this.getGeneratedRandomId();
 
 
@@ -48,7 +48,7 @@ export class CreateGameService {
         let newRoom: any = {};
 
         cards = this._createPlayingCards(size.w, size.h);
-        newRoom[idRoom] = { cards: cards, type: type, state: true, difficulty: difficulty, languages: languages, users: [{ name: username, score: score, id: 0, isActive: true, result: 'lose' }], countHiddenBlock: 0 };
+        newRoom[idRoom] = { cards: cards, type: type, state: true, difficulty: difficulty, languages: languages, users: [{ name: name, score: score, id: +sessionStorage['userid'], isActive: true, activity: true, result: 'lose' }], countHiddenBlock: 0 };
 
         this._createRoomOnFirebase.update(newRoom)          //send data to FireBase
           .then(
@@ -59,7 +59,7 @@ export class CreateGameService {
   }
 
 
-  private _createPlayingCards(col: number, row: number): TCard[][] {
+  private _createPlayingCards(col: number, row: number): TCard[] {
     let arr: TCard[] = [];
     let wordIdList: number[] = this._getWordIdList(row * col);
 
@@ -74,22 +74,9 @@ export class CreateGameService {
       arr.push(square);
     }
     arr.sort(this._sortRandom);
-    return this._createMatrix(arr, row, col);
+    return arr;
   }
 
-  private _createMatrix(array: TCard[], row: number, col: number): TCard[][] {
-    let matrix: TCard[][] = [];
-    let count: number = 0;
-
-    for (let i: number = 0; i < row; i++) {
-      matrix[i] = [];
-      for (let j: number = 0; j < col; j++) {
-        matrix[i][j] = array[count];
-        count++;
-      }
-    }
-    return matrix;
-  }
 
   private _sortRandom(): number {
     return Math.random() - 0.5;

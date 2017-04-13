@@ -2,111 +2,162 @@ import { Subscription, Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { DBService } from '../db.service';
 import { Router } from '@angular/router';
-import { SidebarService } from './sidebar/sidebar.service'
 
 @Injectable()
 export class GamePlayService {
 
   private _roomId: number;
-  private _users: TUser[];
-  private _cards: TCard[][];
+  private _users: TUser[] = [];
+  private _cards: TCard[];
   private _gameType: string;
   private _activeCards: TCard[];
 
   public countHiddenBlock: number;
   private _currentUser: TUser;
   private _timerId: any;
+  private _timerDisconnect: any;
   private _roomSubscriber: Subscription;
   private _timeSubscriber: Subscription;
+  private _firstDataSubscriber: Subscription;
+  private _goToMainMenuSubscriber: Subscription;
+
+  private _userIsLeft: boolean = false;
+
+  public roomObservable;
+  private _sessionStorageUser: string;
+  private _localStorageUser: any;
 
   public startGame: Subject<any>;
   public updateField: Subject<any>;
   public streamFromFirebase: Subject<any>;
+  public pause: Subject<any>;
+  public showPopup: Subject<any>;
 
 
   constructor(
     private _dbService: DBService,
     private _router: Router,
-    private _sidebarService: SidebarService,) {
+   ) {
     this.startGame = new Subject();
     this.updateField = new Subject();
+    this.pause = new Subject();
+    this.showPopup = new Subject();
   }
 
 
-  public initNewGame(roomId: number) {
+  public initNewGame(roomId: number): void{
+
     this._roomId = roomId;
+    this._userIsLeft = false;
+    this._sessionStorageUser = sessionStorage['userid'];
+    this._localStorageUser = localStorage['user'] ? JSON.parse(localStorage['user']) : null;
 
     this.streamFromFirebase = new Subject();
-    let firstDataSubscriber = this.streamFromFirebase
+    this._firstDataSubscriber = this.streamFromFirebase
       .subscribe(data => {
-        if (!data.cards) {
+
+        if (!data.cards ||
+          (data.users.length === 2 && this._checkNewUser(data.users)) ||
+          (data.type === 'single' && this._checkNewUser(data.users))) {
+          this._firstDataSubscriber.unsubscribe();
           this._router.navigate(['mainmenu']);
           return;
-        } else {
-          this._initData(data);
-          this._initSidebar(data);
-          this._roomSubscriber = this.streamFromFirebase.subscribe((res) => this._updateLocalState(res));
         }
-        firstDataSubscriber.unsubscribe();
+        this._initData(data);
+        data.type === 'multi' ? this._initMultiPlayerGame(data) : this._initSinglePlayerGame(data);
       });
 
-    let roomSubscriberForFistData = this._dbService.getObjectFromFB(`rooms/${roomId}`)
+    this.roomObservable = this._dbService.getObjectFromFB(`rooms/${roomId}`)
       .subscribe(this.streamFromFirebase);
-
   }
 
 
-  private _initData(data) {
-    this._cards = data.cards;
-    this._users = data.users;
-    this._gameType = data.type;
-    this.countHiddenBlock = data.countHiddenBlock;
-    this._activeCards = data.activeCards || [];
-    let localUser: number = +localStorage["userid"];
+  private _initMultiPlayerGame(data: TStoreData): void{
+    if(data.users.length < 2){
+      this._checkNewUser(data.users) ? this._createNewUser() : this.showPopup.next('showPopup');
+    }
+    else {
 
-    data.users.forEach(user => {
-      if (user.id === localUser) {
-        this._currentUser = Object.assign({}, user)
-      }
-    });
+      this.startGame.next({
+        cards: data.cards,
+        user: this._currentUser,
+        difficulty: data.difficulty,
+        activeCards: data.activeCards,
+      });
+      this.showPopup.next('');
+      this._roomSubscriber = this.streamFromFirebase.subscribe((res) => this._updateLocalState(res));
+      this._firstDataSubscriber.unsubscribe();
+    }
+  }
+
+
+  private _initSinglePlayerGame(data: TStoreData): void{
     this.startGame.next({
       cards: data.cards,
       user: this._currentUser,
       difficulty: data.difficulty,
       activeCards: data.activeCards,
     });
-
-  }
-
-  private _initSidebar(data) {
-
-    this._sidebarService.initSidebar(data);
-
-    this._timeSubscriber = this._sidebarService.timeIsUp.subscribe(() => {
-
-      if (this._gameType === 'single') {
-        this.endGame();
-      }
-      else if (this._gameType === 'multi') {
-        this._currentUser.score -= 5;
-        this._changeUserScore();
-
-
-        this._users.forEach(user => user.isActive = !user.isActive);
-        this._activeCards.forEach( card => card.isOpen = false );
-
-        this._dbService.updateStateOnFireBase(this._roomId, this._cards, this._activeCards, this._users, this.countHiddenBlock);
-      }
-    });
-
+    this._firstDataSubscriber.unsubscribe();
+    this._roomSubscriber = this.streamFromFirebase.subscribe((res) => this._updateLocalState(res));
   }
 
 
-  private _updateLocalState(data): void {
+  private _createNewUser(): void{
+    let newID = Date.now().toString();
+    sessionStorage['userid'] = newID;
+    this._sessionStorageUser = newID;
+    let name = this._localStorageUser ? this._localStorageUser.username : 'Unknown';
+    this._currentUser = {
+      id: +newID,
+      isActive: false,
+      name: name,
+      result: "lose",
+      score: 20
+    };
+    this._users.push(this._currentUser);
+    this._dbService.updateStateOnFireBase(this._roomId, this._cards, this._activeCards, this._users, this.countHiddenBlock);
+  }
+
+
+  private _checkNewUser(users: TUser[]): boolean{
+    if(!this._sessionStorageUser) return true;
+    let localStorageUserId: number = +this._sessionStorageUser ;
+    let result = users.filter((user) => +user.id === localStorageUserId);
+    return result.length === 0;
+  }
+
+
+  private _initData(data: TStoreData): void {
+    this._cards = data.cards;
+    this._users = data.users;
+    this._gameType = data.type;
+    this.countHiddenBlock = data.countHiddenBlock;
+    this._activeCards = data.activeCards || [];
+    let sessionStorageUserId: number = +this._sessionStorageUser;
+
+    if(this._sessionStorageUser){
+      data.users.forEach(user => {
+        if (user.id === sessionStorageUserId) {
+          this._currentUser = Object.assign({}, user)
+        }
+      });
+    }
+
+  }
+
+
+  private _updateLocalState(data: TStoreData): void {
+
+    clearTimeout(this._timerDisconnect);
 
     if (!data.cards) {
-      this.removeSubscriptions();
-      this._router.navigate([`mainmenu/`]);
+      if(this._users.length === 2) {
+        if(!this._userIsLeft)this.showPopup.next('endGame');
+      }
+      else {
+        this._router.navigate([`mainmenu`]);
+      }
       return;
     }
 
@@ -116,9 +167,8 @@ export class GamePlayService {
     this._users = data.users.map(user => Object.assign({}, user));
     this.countHiddenBlock = data.countHiddenBlock;
 
-    this.updateActivityForCurrentUser(data.users);
-    this._sidebarService.changeUserState(data.users);
-    this._changeStateByOpendCards(activeCards);
+    this._updateActivityForCurrentUser(data.users);
+    this._changeStateByOpenedCards(activeCards);
 
     this.updateField.next({
       activeCards: activeCards,
@@ -128,15 +178,11 @@ export class GamePlayService {
   }
 
 
-  private _changeStateByOpendCards(activeCards: TCard[]) {
+  private _changeStateByOpenedCards(activeCards: TCard[]): void {
     switch (activeCards.length) {
       case 0:
         if (!this._currentUser.isActive) {
           this._updateCards(activeCards);
-        }
-        if (this._gameType === 'multi') {
-          this._sidebarService.stopTimer();
-          this._sidebarService.startTimer();
         }
         break;
       case 1:
@@ -147,8 +193,9 @@ export class GamePlayService {
         break;
       case 2:
         this._isWin(this._cards);
-        if (this._currentUser.isActive) {
-          if (!activeCards[0].isOpen || activeCards[0].isHide) {
+        if (!activeCards[0].isOpen || activeCards[0].isHide) {
+
+          if (this._currentUser.isActive) {
             this._timerId = setTimeout(() => {
               this._dbService.updateStateOnFireBase(this._roomId, this._cards, [], this._users, this.countHiddenBlock);
             }, 500);
@@ -159,24 +206,23 @@ export class GamePlayService {
   }
 
 
-  private updateActivityForCurrentUser(users: TUser[]) {
+  private _updateActivityForCurrentUser(users: TUser[]): void {
     users.forEach(user => {
       if (user.id === this._currentUser.id) this._currentUser.isActive = user.isActive;
     });
   }
 
 
-  public prepareNewState(activeCards: TCard[]) {
+  public prepareNewState(activeCards: TCard[]): void {
     if (activeCards.length === 2) {
-      this._checkactiveCards(activeCards);
-      if (this._gameType === 'multi') this._users.forEach(user => user.isActive = !user.isActive);
+      this._checkActiveCards(activeCards);
     }
     this._updateCards(activeCards);
     this._dbService.updateStateOnFireBase(this._roomId, this._cards, activeCards, this._users, this.countHiddenBlock);
   }
 
 
-  private _checkactiveCards(activeCards: TCard[]) {
+  private _checkActiveCards(activeCards: TCard[]): void {
     if (activeCards[0].wordId === activeCards[1].wordId) {
       activeCards[0].isHide = true;
       activeCards[1].isHide = true;
@@ -184,6 +230,7 @@ export class GamePlayService {
       this.countHiddenBlock += 1;
     } else {
       this._timerId = setTimeout(() => {
+        if (this._gameType === 'multi') this._users.forEach(user => user.isActive = !user.isActive);
         activeCards.forEach(card => card.isOpen = false);
         this._dbService.updateStateOnFireBase(this._roomId, this._cards, activeCards, this._users, this.countHiddenBlock);
       }, 500);
@@ -197,32 +244,30 @@ export class GamePlayService {
     this._users.forEach(user => {
       if (user.id === this._currentUser.id) {
         user.score = this._currentUser.score;
-        if (user.score < 0) user.score = 0;
+        if (user.score < 0){
+          this._currentUser.score = 0;
+          user.score = 0;
+        }
       }
     });
   }
 
 
-
-  private _updateCards(activeCards: TCard[]) {
+  private _updateCards(activeCards: TCard[]): void {
     this._activeCards = activeCards;
-    this._cards.forEach(cardRow => {
-      cardRow.forEach(card => {
-        activeCards.forEach(activeCard => {
-          if (card.id === activeCard.id) {
-            card.isOpen = activeCard.isOpen;
-            card.isHide = activeCard.isHide;
-          }
-        });
+    this._cards.forEach(card => {
+      activeCards.forEach(activeCard => {
+        if (card.id === activeCard.id) {
+          card.isOpen = activeCard.isOpen;
+          card.isHide = activeCard.isHide;
+        }
       });
     });
   }
 
 
-
-  private _isWin(cells: TCard[][]): void {
-    if (this.countHiddenBlock === (cells.length * cells[0].length) / 2) {
-
+  private _isWin(cells: TCard[]): void {
+    if (this.countHiddenBlock === (cells.length / 2) ) {
       if (this._gameType === 'multi') {
         let diff: number = this._users[0].score - this._users[1].score;
         switch (diff) {
@@ -239,26 +284,33 @@ export class GamePlayService {
         }
       }
       else this._users[0].result = 'win';
-
       this.endGame();
     }
-
   }
 
 
-  public endGame() {
-    this.removeSubscriptions();
-    this._sidebarService.stopTimer();
+  public goToMainMenu(): void{
+    this._userIsLeft = true;
+    this._dbService.deleteRoom(this._roomId)
+      .then(() => this._router.navigate([`mainmenu`]))
+  }
+
+
+  public endGame(): void {
     this._dbService.updateStateOnFireBase(this._roomId, this._cards, [], this._users, this.countHiddenBlock)
       .then(() => this._router.navigate([`playzone/${this._roomId}/result`]));
 
   }
 
 
-  public removeSubscriptions() {
+  public removeSubscriptions(): void {
+    clearTimeout(this._timerId);
+    clearTimeout(this._timerDisconnect);
+    this._timeSubscriber.unsubscribe();
     this._roomSubscriber.unsubscribe();
     this.streamFromFirebase.unsubscribe();
+    this.roomObservable.unsubscribe();
+    this._goToMainMenuSubscriber.unsubscribe();
   }
-
 
 }

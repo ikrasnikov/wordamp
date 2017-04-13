@@ -90,7 +90,7 @@ export class OptionsComponent implements OnDestroy {
   }
 
 
-  public startGame(event){  
+  public startGame(event){
     (event.target as HTMLElement).setAttribute("disabled", "true");
     document.removeEventListener("keydown", this.keyDownHandler);
     this.getChangesFromForm.unsubscribe();

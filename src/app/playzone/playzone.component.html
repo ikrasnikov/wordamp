@@ -1,14 +1,46 @@
-<app-sidebar></app-sidebar>
-<div class="field" [class.small] ="difficulty.small" [class.medium] ="difficulty.medium" [class.large] ="difficulty.large">
-  <div class="row" *ngFor="let rows of field">
-    <div class="cell flip-container" *ngFor="let card of rows">
-      <div class="flipper"  draggable="fasle" [class.open] ="card.isOpen">
-        <div class="card" [class.isOpen] ="card.isOpen" draggable="fasle" (click)="openCard(card)">
-        </div>
-        <div class="word" [class.isHide]="card.isHide">
-          {{card.word}}
-        </div>
+
+<div class="field" [class.active] ="activeField"  [class.small] ="difficulty.small" [class.medium] ="difficulty.medium" [class.large] ="difficulty.large">
+  <div class="row">
+    <div class="flipper"  *ngFor="let card of field" [class.open] ="card.isOpen">
+      <div class="card" [class.isOpen] ="card.isOpen" (click)="openCard(card)"></div>
+      <div class="word" [class.isHide]="card.isHide">
+        {{card.word}}
       </div>
     </div>
   </div>
 </div>
+
+
+<div *ngIf="isPopup === 'showPopup'" class="waiting_container">
+
+  <h1 class="text-center title_waiting">Share link to your friend or use QR-code:</h1>
+
+  <div class="waiting_content">
+
+    <div class="form-group share_link_box">
+      <input type="text" class="share_link" id="share_link" [value]="shareAbleLink">
+      <button appTooltip [textForOver]="'Copy to clipboard'" [textForClick]="'Copied!'" class="btn btn-primary copy" (click)="copyLink()"><span class="copy_text">Copy text</span><span class="wc_tooltip"></span></button>
+    </div>
+
+
+    <div class="qrcode_box">
+      <img [src]="qrCodeLink" />
+    </div>
+
+    <p class="text_waiting">Waiting . . .</p>
+
+    <button class="btn btn-danger cancel" (click)="goToMainMenu()">Cancel</button>
+
+  </div>
+
+</div>
+
+<div *ngIf="isPopup === 'endGame'" class="information_window">
+
+  <h4 class="text-center text-success title_waiting">Your opponent left the game. Congratulations, you are the winner!</h4>
+
+  <div class="col-xs-12 text-center">
+    <button class="btn btn-primary" (click)="goToMainMenu()">Main menu</button></div>
+</div>
+<div *ngIf="isPopup" class="overlay"></div>
+
