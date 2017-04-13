@@ -15,6 +15,8 @@
 }
 h1 {
   font-size: 2.5em;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 .lang p, .type p, .difficulty p {
   text-align: center;
@@ -167,14 +169,23 @@ div.lang.last  {
 /**************btn start************/
 .submit .btn {
  margin: 1% 0 1% 0;
- width: 75%;
- /*width: 15%;*/
+ /*width: 75%;*/
+ width: 15%;
 }
-.submit .btn-center {
+.submit .play {
+  width: 20%;
+}
+/*.submit .btn-center {
   margin-left: 50%;
   transform: translateX(-50%);
+}*/
+.submit {
+  text-align: center;
 }
-
+.cancel img{
+  cursor:pointer;
+  width: 45px;
+}
 /******** media **********/
 @media screen and (max-width: 1200px)  {
   .lang p, .difficulty p {
@@ -226,6 +237,9 @@ div.lang.last  {
   .menu img.languages {
     width: 50px;
   }
+  .submit .play {
+    width: 30%;
+  }
 }
 @media screen and (max-width: 768px)  {
   .title {
@@ -256,6 +270,9 @@ div.lang.last  {
  }
  h1 {
   font-size: 2em;
+  }
+  .submit .play {
+    width: 45%;
   }
 }
 @media screen and (max-width: 500px)  {
@@ -327,9 +344,21 @@ div.lang.last  {
     padding: 5px;
     margin-top: -10px;
   }
+  .cancel {
+    margin-left: -15px;
+  }
+  .cancel img {
+    width: 35px;
+  }
+  .submit .play {
+    width: 50%;
+  }
 }
 @media screen and (max-width: 320px)  {
   h1{
     font-size: 1.8em;
+  }
+   .submit .play {
+    width: 75%;
   }
 }

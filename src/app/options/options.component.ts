@@ -101,6 +101,7 @@ export class OptionsComponent implements OnDestroy {
 
 
   public closePopup(){
+    console.log("click");
     document.removeEventListener("keydown", this.keyDownHandler);
     this.isShow = false;
     this.getChangesFromForm.unsubscribe();
