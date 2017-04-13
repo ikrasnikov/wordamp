@@ -31,6 +31,7 @@ import { IntroductionService } from './introduction/introduction.service';
 import { OptionsComponent } from './options/options.component';
 import { OptionsService } from './options/options.service';
 import { DropdownDirective } from './options/dropdown.directive';
+import { TooltipDirective } from "./playzone/tooltip.directive";
 
 
 const routes = [
@@ -42,9 +43,6 @@ const routes = [
   },
   {
     path: "mainmenu/multi", component: MultiplayerMenuComponent
-  },
-  {
-    path: "mainmenu/multi/:id", component: MultiplayerMenuComponent
   },
   {
     path: "playzone/:id", component: PlayzoneComponent
@@ -65,6 +63,7 @@ const routes = [
     IntroductionComponent,
     OptionsComponent,
     DropdownDirective,
+    TooltipDirective
   ],
   imports: [
     BrowserModule,
