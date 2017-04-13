@@ -15,6 +15,8 @@
 }
 h1 {
   font-size: 2.5em;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 .lang p, .type p, .difficulty p {
   text-align: center;
@@ -66,8 +68,8 @@ div.new-name label {
   display: inline-block;
 }
 .lang button {
-  width: 130px;
-  height: 130px;
+  width: 120px;
+  height: 120px;
   background: rgba(0,0,0,0);
   border-radius: 50%;
   border:none;
@@ -120,8 +122,6 @@ div.new-name label {
 div.lang.last  {
   margin-left: -45px;
 }
-
-/*******************radio buttons*****************/
 /*difficulty*/
 .difficulty label{
   opacity: .5;
@@ -138,7 +138,6 @@ div.lang.last  {
   -webkit-box-shadow: 0 0 2px 2px rgba(0,0,0,0.5) ;
   box-shadow: 0 0 2px 2px rgba(0,0,0,0.5) ;
 }
-/********the same***********/
 .difficulty label {
   cursor:pointer;
   width: 100%;
@@ -168,13 +167,56 @@ div.lang.last  {
   font-size: 1em;
 }
 /**************btn start************/
-.submit .btn {
- margin: 2% 15px 2% 15px;
- width: 30%;
+.submit a {
+ margin: 1% 0 1% 0;
+ /*width: 75%;*/
+ /*width: 15%;*/
 }
-.submit .btn-center {
- margin-left: 50%;
- transform: translateX(-50%);
+.submit {
+  text-align: center;
+}
+.cancel img{
+  cursor:pointer;
+  width: 45px;
+}
+.myButton {
+   font-size: 1.5em;
+	padding:15px 90px;
+	-moz-box-shadow: -1px 9px 14px -7px #3e7327;
+	-webkit-box-shadow: -1px 9px 14px -7px #3e7327;
+	box-shadow: -1px 9px 14px -7px #3e7327;
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #77b55a), color-stop(1, #72b352));
+	background:-moz-linear-gradient(top, #77b55a 5%, #72b352 100%);
+	background:-webkit-linear-gradient(top, #77b55a 5%, #72b352 100%);
+	background:-o-linear-gradient(top, #77b55a 5%, #72b352 100%);
+	background:-ms-linear-gradient(top, #77b55a 5%, #72b352 100%);
+	background:linear-gradient(to bottom, #77b55a 5%, #72b352 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#77b55a', endColorstr='#72b352',GradientType=0);
+	background-color:#77b55a;
+	-moz-border-radius:21px;
+	-webkit-border-radius:21px;
+	border-radius:21px;
+	border:1px solid #4b8f29;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-weight:bold;
+	text-decoration:none;
+	text-shadow:0px 2px 0px #5b8a3c;
+}
+.myButton:hover {
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #72b352), color-stop(1, #77b55a));
+	background:-moz-linear-gradient(top, #72b352 5%, #77b55a 100%);
+	background:-webkit-linear-gradient(top, #72b352 5%, #77b55a 100%);
+	background:-o-linear-gradient(top, #72b352 5%, #77b55a 100%);
+	background:-ms-linear-gradient(top, #72b352 5%, #77b55a 100%);
+	background:linear-gradient(to bottom, #72b352 5%, #77b55a 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#72b352', endColorstr='#77b55a',GradientType=0);
+	background-color:#72b352;
+}
+.myButton:active {
+	position:relative;
+	top:1px;
 }
 
 /******** media **********/
@@ -228,6 +270,9 @@ div.lang.last  {
   .menu img.languages {
     width: 50px;
   }
+  .submit .play {
+    width: 30%;
+  }
 }
 @media screen and (max-width: 768px)  {
   .title {
@@ -258,6 +303,13 @@ div.lang.last  {
  }
  h1 {
   font-size: 2em;
+  }
+  .submit .play {
+    width: 45%;
+  }
+  .myButton {
+   font-size: 1.2em;
+	padding: 8px 60px;
   }
 }
 @media screen and (max-width: 500px)  {
@@ -329,9 +381,21 @@ div.lang.last  {
     padding: 5px;
     margin-top: -10px;
   }
+  .cancel {
+    margin-left: -15px;
+  }
+  .cancel img {
+    width: 35px;
+  }
+  .submit .play {
+    width: 50%;
+  }
 }
 @media screen and (max-width: 320px)  {
   h1{
     font-size: 1.8em;
+  }
+   .submit .play {
+    width: 75%;
   }
 }
