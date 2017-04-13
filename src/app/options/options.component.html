@@ -10,7 +10,7 @@
 
     <div class="form-group exists-name" *ngIf="!isEditing">
       <div class="col-lg-12  col-md-12 col-sm-12 col-xs-12 text-center">
-        <span>You Name: <strong class="editname" (click)="toogleStateOfEditing()">{{menuGame.value.username}}</strong></span>
+        <span>You name: <strong class="editname" (click)="toogleStateOfEditing()">{{menuGame.value.username}}</strong></span>
       </div>
       <div class="clearfix"></div>
     </div>
@@ -67,10 +67,10 @@
     <div class="form-group difficulty">
 
       <div class="col-lg-12 col-md-3 col-sm-3 col-xs-3">
-        <p class="title">Choose Difficulty:</p>
+        <p class="title">Choose difficulty:</p>
       </div>
 
-      <div class="col-lg-4 col-md-3 col-sm-3 col-xs-3 first">
+      <div class=" col-lg-offset-3 col-lg-2 col-md-3 col-sm-3 col-xs-3 first">
         <input hidden type="radio" id="small" value="small" name="difficulty" formControlName="difficulty">
         <label class="small" for="small">
           <div class="col-lg-12 size_img">
@@ -84,7 +84,7 @@
         </label>
       </div>
 
-      <div class="col-lg-4 col-md-3 col-sm-3 col-xs-3 first">
+      <div class="col-lg-2 col-md-3 col-sm-3 col-xs-3 first">
         <input hidden type="radio" id="medium" value="medium" name="difficulty" formControlName="difficulty">
         <label class="medium" for="medium">
           <div class="col-lg-12 size_img">
@@ -98,7 +98,7 @@
         </label>
       </div>
 
-      <div class="col-lg-4 col-md-3 col-sm-3 col-xs-3 first">
+      <div class="col-lg-2 col-md-3 col-sm-3 col-xs-3 first">
         <input hidden type="radio" id="large" value="large" name="difficulty" formControlName="difficulty">
         <label class="large" for="large">
           <div class="col-lg-12 size_img">
@@ -117,11 +117,13 @@
 
 
     <div class="select-step">
-      <div class="col-sm-6 col-xs-12 submit">
+      <!--col-sm-offset-3 col-sm-3-->
+      <div class="col-sm-offset-3 col-sm-3 col-xs-12 submit">
          <input type="submit" class="btn btn-success btn-center" value="Start">
       </div>
 
-      <div class="col-sm-6 col-xs-12  submit">
+<!--col-sm-3-->
+      <div class="col-sm-3 col-xs-12  submit">
          <button (click)="closePopup()" class="btn btn-primary btn-center">Cancel</button>
       </div>
 

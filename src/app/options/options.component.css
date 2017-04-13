@@ -66,8 +66,8 @@ div.new-name label {
   display: inline-block;
 }
 .lang button {
-  width: 130px;
-  height: 130px;
+  width: 120px;
+  height: 120px;
   background: rgba(0,0,0,0);
   border-radius: 50%;
   border:none;
@@ -120,8 +120,6 @@ div.new-name label {
 div.lang.last  {
   margin-left: -45px;
 }
-
-/*******************radio buttons*****************/
 /*difficulty*/
 .difficulty label{
   opacity: .5;
@@ -138,7 +136,6 @@ div.lang.last  {
   -webkit-box-shadow: 0 0 2px 2px rgba(0,0,0,0.5) ;
   box-shadow: 0 0 2px 2px rgba(0,0,0,0.5) ;
 }
-/********the same***********/
 .difficulty label {
   cursor:pointer;
   width: 100%;
@@ -169,12 +166,13 @@ div.lang.last  {
 }
 /**************btn start************/
 .submit .btn {
- margin: 2% 15px 2% 15px;
- width: 30%;
+ margin: 1% 0 1% 0;
+ width: 75%;
+ /*width: 15%;*/
 }
 .submit .btn-center {
- margin-left: 50%;
- transform: translateX(-50%);
+  margin-left: 50%;
+  transform: translateX(-50%);
 }
 
 /******** media **********/
