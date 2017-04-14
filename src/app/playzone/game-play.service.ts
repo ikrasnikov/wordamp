@@ -338,7 +338,7 @@ export class GamePlayService {
   public endGame(): void {
     this._sidebarService.stopTimer();
     this._dbService.updateStateOnFireBase(this._roomId, this._cards, [], this._users, this.countHiddenBlock)
-      .then(() => console.log("Here is going to be result component :)"));
+      .then(() => this._router.navigate([`playzone/${this._roomId}/result`]));
 
   }
 
