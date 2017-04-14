@@ -5,7 +5,6 @@ import { DBService } from '../db.service';
 import { CreateGameService } from '../main-menu/create-game.service';
 import { FirebaseObjectObservable } from 'angularfire2';
 import { Subscription } from "rxjs";
-import { LocalStorageService } from "../local-storage.service";
 
 
 @Component({
@@ -13,7 +12,7 @@ import { LocalStorageService } from "../local-storage.service";
   templateUrl: './result.component.html',
   styleUrls: ['./result.component.css']
 })
-export class ResultComponent implements OnInit {
+export class ResultComponent {
 
   private _roomId:number;
   public score:number;
@@ -40,14 +39,13 @@ export class ResultComponent implements OnInit {
     large: false
   };
 
+
   constructor(private _dbService: DBService,
               private _createGameService: CreateGameService,
               private _activatedRoute: ActivatedRoute,
               private _router: Router,
-              private _localSrorage: LocalStorageService,
-             ){}
+  ){
 
-  ngOnInit(){
     this._activatedRoute.params.forEach((param: Params) => {
       this._roomId = param['id'];
     });
@@ -68,7 +66,8 @@ export class ResultComponent implements OnInit {
     });
   }
 
-  private _preparePlayAgain(options: TStoreData): void {
+
+  private _preparePlayAgain(options: TStoreData):void {
     this.multi = (options.type === 'multi');
     if (this.multi) return;
     this._model = {
@@ -79,8 +78,9 @@ export class ResultComponent implements OnInit {
     };
   }
 
-  private _getUserResult(users: TUser[]): void {
-    let userid:number = +this._localSrorage.getLocalStorageValue("userid");
+
+  private _getUserResult(users: TUser[]):void {
+    let userid:number = + sessionStorage['userid'];
     users.forEach((user) => {
       if (user.id === userid){
         this.score = user.score;
@@ -100,7 +100,8 @@ export class ResultComponent implements OnInit {
     });
   }
 
-  private _countStars(difficulty:string): void {
+
+  private _countStars(difficulty:string):void {
     if (difficulty === 'medium') {
       this.starsDone.medium = true
     }
@@ -110,19 +111,27 @@ export class ResultComponent implements OnInit {
     }
   }
 
-  public playAgain() :void {
-    this._room.unsubscribe();
 
-    this._createGameService.makePlayZone(this._model);
-    let mainMenuServiceSuscriber:Subscription =  this._createGameService.startPlayingGame.subscribe((id) => {
-      this._dbService.deleteRoom(this._roomId);
-      this._router.navigate(['playzone', id]);
-      mainMenuServiceSuscriber.unsubscribe();
-    });
+  public playAgainAlone():void {
+    this._room.unsubscribe();
+    this._deleteRoomAndStartNewGame();
+  }
+
+
+  public playAgainWithFriend():void {
+    this._room.unsubscribe();
+    this._model.type = "multi";
+    this._deleteRoomAndStartNewGame();
+  }
+
+
+  private _deleteRoomAndStartNewGame():void {
+    this._dbService.deleteRoom(this._roomId);
     this._roomObservable.remove().then( () => this._createGameService.makePlayZone(this._model));
   }
 
-  public goToMainMenu(): void{
+
+  public goToMainMenu():void{
     this._room.unsubscribe();
     this._dbService.deleteRoom(this._roomId).then(() => this._router.navigate(['mainmenu']));
   }
