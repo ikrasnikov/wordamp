@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { DBService } from '../../db.service';
+import { Component, OnDestroy } from '@angular/core';
 import { SidebarService } from "./sidebar.service"
 import { Subscription } from "rxjs";
+import { LocalStorageService } from '../../local-storage.service'
 import { ActivatedRoute, Params } from '@angular/router';
 
 @Component({
@@ -9,58 +9,92 @@ import { ActivatedRoute, Params } from '@angular/router';
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.css']
 })
-export class SidebarComponent implements OnInit {
+export class SidebarComponent implements OnDestroy{
 
   private _roomId:number;
   private _roomSubscriber:Subscription;
   private _userSubscriber:Subscription;
   private _timeSubscriber:Subscription;
-  public firstUser: TUser = {name: "", score: 0, isActive: false, id: 0, result: "lose"};
-  public secondUser: TUser = {name: "", score: 0, isActive: false, id: 1, result: "lose"};
+  public firstUser: TUser = {name: "", score: 20, isActive: false, id: 0, result: "lose"};
+  public secondUser: TUser = {name: "Unknow", score: 20, isActive: false, id: 1, result: "lose"};
   public multi:boolean;
   public time:number;
+  private onBeforeUnloadHandler:EventListener;
+  private onUnloadHandler:EventListener;
+
 
   constructor(
-    private _dbService: DBService,
     private _sidebarService: SidebarService,
-    private _activatedRoute: ActivatedRoute
+    private _activatedRoute: ActivatedRoute,
+    private _localStorageService: LocalStorageService,
   ) {
+
+    let localStorage:string = this._localStorageService.getLocalStorageValue("user");
+    if(localStorage) this.firstUser.name = JSON.parse(localStorage).username;
+
+    this.time = 0;
 
     this._activatedRoute.params.forEach((param: Params) => {
       this._roomId = param['id'];
     });
 
-    this._roomSubscriber = this._sidebarService.room.subscribe((options) => {
-      this._setSidebar(options);
-      this._sidebarService.initTimer(options);
-      this._roomSubscriber.unsubscribe();
+    this._roomSubscriber = this._sidebarService.roomObservable
+      .take(1)
+      .subscribe((options) => {
+        this._setSidebar(options);
+        this._sidebarService.initTimer(options);
+      });
+
+    this._timeSubscriber = this._sidebarService.timeSendObservable.subscribe( (number) => {
+      this.time = number;
     });
 
-    this._timeSubscriber = this._sidebarService.timeSend.subscribe( (number) => {
-      this.time = number/1000;
-    });
+    this._userSubscriber = this._sidebarService.usersObservable.subscribe((users) => {
 
-    this._userSubscriber = this._sidebarService.users.subscribe((users) => {
       this._changeUsersState(users);
     });
 
-    this._sidebarService.timeIsUp.subscribe( () => {
-      if (!this.multi) {
-        this._roomSubscriber.unsubscribe()
-      }
-    });
+    this.onBeforeUnloadHandler = this._onBeforeUnload;
+    this.onUnloadHandler = this._onUnload.bind(this);
 
+
+    addEventListener("beforeunload",  this.onBeforeUnloadHandler);
+    addEventListener("unload",  this.onUnloadHandler);
   }
 
-  ngOnInit() {}
 
-  private _setSidebar(options:TStoreData): void {
+  ngOnDestroy(){
+    this._roomSubscriber.unsubscribe();
+    this._userSubscriber.unsubscribe();
+    this._timeSubscriber.unsubscribe();
+    this._sidebarService.stopTimer();
+    removeEventListener("beforeunload",  this.onBeforeUnloadHandler);
+    removeEventListener("unload",  this.onUnloadHandler);
+  }
+
+
+  private _onBeforeUnload(e: Event):void {
+    e.returnValue = true;
+    return
+  }
+
+
+  private _onUnload ():void {
+    removeEventListener("beforeunload",  this.onBeforeUnloadHandler);
+    removeEventListener("unload",  this.onUnloadHandler);
+    this.goToMainMenu();
+  }
+
+
+  private _setSidebar(options:TStoreData):void {
     (options.type !== "single") ? this.multi = true : this.multi = false;
     this.firstUser = options.users[0];
-    this.secondUser = options.users[1];
+    if (options.users.length > 1) this.secondUser = options.users[1];
   }
 
-  private _changeUsersState(users: TUser[]): void {
+
+  private _changeUsersState(users:TUser[]):void {
+
     if (this.multi === false) {
       this.firstUser = users[0];
     } else {
@@ -68,11 +102,8 @@ export class SidebarComponent implements OnInit {
     }
   }
 
-  public goToMainMenu(): void{
-    this._userSubscriber.unsubscribe();
-    this._sidebarService.stopTimer();
-    this._timeSubscriber.unsubscribe();
-    this._dbService.deleteRoom(this._roomId);
-  }
 
+  public goToMainMenu(): void{
+    this._sidebarService.goToMainMenu.emit();
+  }
 }

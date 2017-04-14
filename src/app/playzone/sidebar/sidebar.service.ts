@@ -1,13 +1,22 @@
 import { Injectable, EventEmitter } from '@angular/core';
-import { LocalStorageService } from "../../local-storage.service";
+import {Observable} from "rxjs";
 
 @Injectable()
 export class SidebarService {
 
-  public timeSend: EventEmitter<number>;
-  public timeIsUp: EventEmitter<any>;
-  public users: EventEmitter<any>;
-  public room: EventEmitter<any>;
+  public timeSendObservable: Observable<number>;
+  public timeIsUpObservable: Observable<boolean>;
+  public usersObservable: Observable<TUser[]>;
+  public roomObservable: Observable<TStoreData>;
+  public goToMainMenu: EventEmitter<any>;
+
+
+  private _timeSend: EventEmitter<any>;
+  private _timeIsUp: EventEmitter<boolean>;
+  private _users: EventEmitter<TUser[]>;
+  private _room: EventEmitter<TStoreData>;
+
+
   private _timerId:any;
   private _time:number;
   private _startTime:number;
@@ -18,37 +27,47 @@ export class SidebarService {
     small: 60000,
     medium: 120000,
     large : 180000,
-    multi: 5000,
+    multi: 7000,
   };
 
 
-  constructor(
-    private _localSrorage: LocalStorageService,
-  ) {
-    this.timeSend = new EventEmitter();
-    this.timeIsUp = new EventEmitter();
-    this.users = new EventEmitter();
-    this.room = new EventEmitter();
+  constructor() {
+    this._timeSend = new EventEmitter();
+    this.timeSendObservable = this._timeSend.asObservable();
+
+    this._timeIsUp = new EventEmitter();
+    this.timeIsUpObservable = this._timeIsUp.asObservable();
+
+    this._users = new EventEmitter();
+    this.usersObservable = this._users.asObservable();
+
+    this._room = new EventEmitter();
+    this.roomObservable = this._room.asObservable();
+
+    this.goToMainMenu = new EventEmitter();
   }
 
 
   public initSidebar(options:TStoreData):void {
-    this.room.emit(options);
-    this._currentUserId = +this._localSrorage.getLocalStorageValue("userid");
+    this._room.emit(options);
+    this._currentUserId = +sessionStorage['userid'];
     this._getActiveUser(options.users);
   }
 
 
   public changeUserState(users:TUser[]):void {
-    this.users.emit(users);
+    this._users.emit(users);
     this._getActiveUser(users);
-
   }
 
 
   private _getActiveUser(users:TUser[]):void {
     users.forEach((user) => {
       if (user.isActive === true){
+        if(this._activeUser && user.id !== this._activeUser.id){
+          this.stopTimer();
+          this.startTimer();
+        }
         this._activeUser = Object.assign({}, user);
       }
     });
@@ -73,17 +92,18 @@ export class SidebarService {
   private changeTime():void {
     if (!this._time) {
       this.stopTimer();
-      if (this._activeUser.id === this._currentUserId) this.timeIsUp.emit();
+      if (this._activeUser.id === this._currentUserId) this._timeIsUp.emit(true);
+      else this._timeIsUp.emit(false);
     } else {
       this._time =  this._time - 1000;
-      this.timeSend.emit(this._time);
+      this._timeSend.emit(this._time);
     }
   }
 
 
   public startTimer ():void {
     this._time = this._startTime;
-    this.timeSend.emit(this._time);
+    this._timeSend.emit(this._time);
     this._timerId = setInterval(() => this.changeTime(), 1000);
   }
 
