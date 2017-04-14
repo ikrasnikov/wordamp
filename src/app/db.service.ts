@@ -7,7 +7,7 @@ export class DBService {
 
   constructor(private _af : AngularFire) {}
 
-  public getObjectFromFB(path: string):FirebaseObjectObservable<any>  {
+  public getObjectFromFireBase(path: string):FirebaseObjectObservable<any>  {
     return this._af.database.object(path);
   }
 
@@ -17,7 +17,7 @@ export class DBService {
   }
 
 
-  public getAllMultiPlayerRoom(): FirebaseListObservable<any> {
+  public getAllMultiPlayerRoomFromFireBase(): FirebaseListObservable<any> {
     const queryObservable = this._af.database.list(`rooms`, {
       query: {
         orderByChild: "type",
@@ -28,7 +28,7 @@ export class DBService {
     return queryObservable;
   }
 
-  public deleteRoom(id){
+  public deleteRoomOnFireBase(id){
     return this._af.database.object(`rooms/${id}`).remove();
   }
 

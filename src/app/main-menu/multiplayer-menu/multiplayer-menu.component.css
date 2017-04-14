@@ -28,11 +28,11 @@ h1 {
 }
 /******Difficulty********/
 .stars {
-    display: inline;
+  display: inline;
 }
 .stars img {
-    width: 35px;
-    height: 35px;
+  width: 35px;
+  height: 35px;
 }
 /******Language********/
 .lang img {
@@ -48,12 +48,12 @@ h1 {
 }
 /**** btn join ***********/
 button.join {
-    padding: 5px 40px;
+  padding: 5px 40px;
 }
 /****** header********/
 .center {
-    float: none;
-    margin: 2% auto;
+  float: none;
+  margin: 2% auto;
 }
 .header h1{
   display: inline-block;
@@ -87,10 +87,10 @@ button.join {
   }
 }
 @media screen and (max-width: 768px)  {
-   .table-wrap {
+  .table-wrap {
     height: 350px;
   }
-   .stars img {
+  .stars img {
     width: 22px;
     height: 22px;
   }
@@ -108,8 +108,8 @@ button.join {
     overflow: hidden;
   }
   h1{
-      font-size: 2em;
-    }
+    font-size: 2em;
+  }
   .header a.btn {
     padding: 5px;
     margin-top: -10px;
@@ -135,7 +135,7 @@ button.join {
     font-size: .9em;
     padding-right: 0;
   }
-   .table-wrap .table td {
+  .table-wrap .table td {
     padding: 2px;
   }
   input {
@@ -147,7 +147,7 @@ button.join {
   }
 }
 @media screen and (max-width: 320px)  {
-   h1{
+  h1{
     font-size: 1.8em;
   }
   .table-wrap {

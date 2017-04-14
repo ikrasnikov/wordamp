@@ -28,7 +28,7 @@ h1 {
     font-size: 1.6em;
   }
   div a.btn {
-     width: 100%;
+    width: 100%;
   }
 }
 @media screen and (max-width: 500px)  {
@@ -39,7 +39,7 @@ h1 {
     height: 100px;
   }
   div a.btn {
-     width: 100%;
+    width: 100%;
   }
   h1 {
     font-size: 2em;

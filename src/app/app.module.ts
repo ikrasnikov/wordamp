@@ -30,7 +30,6 @@ import { IntroductionService } from './introduction/introduction.service';
 
 import { OptionsComponent } from './options/options.component';
 import { OptionsService } from './options/options.service';
-import { DropdownDirective } from './options/dropdown.directive';
 import { TooltipDirective } from "./playzone/tooltip.directive";
 
 
@@ -62,7 +61,6 @@ const routes = [
     ResultComponent,
     IntroductionComponent,
     OptionsComponent,
-    DropdownDirective,
     TooltipDirective
   ],
   imports: [

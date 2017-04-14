@@ -5,7 +5,7 @@ export class LocalStorageService {
 
   constructor() { }
 
-    // work with localStorage
+  // work with localStorage
   public setLocalStorageValue(name: string, value: string):void {
     (localStorage as Storage).setItem(name, value);
   }
@@ -14,9 +14,13 @@ export class LocalStorageService {
     return (localStorage as Storage).getItem(name);
   }
 
-  public removeLocalStorageValue(name: string) {
-    (localStorage as Storage).removeItem(name);
+  // work with sessionStorage
+  public setSesionStorageValue(name: string, value: string):void {
+    (sessionStorage as Storage).setItem(name, value);
   }
 
+  public getSesionStorageValue(name: string): string {
+    return (sessionStorage as Storage).getItem(name);
+  }
 
 }

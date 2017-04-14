@@ -30,7 +30,7 @@ export class OptionsService {
       type: ""
     };
 
-    let dictionaryListObservable: Subscription = this._dbService.getObjectFromFB(`dictionary/languagaesList`).subscribe(lang => {
+    let dictionaryListObservable: Subscription = this._dbService.getObjectFromFireBase(`dictionary/languagaesList`).subscribe(lang => {
 
       options.languages.first = this._getLanguage("first",lang);
       options.languages.last = this._getLanguage("last",lang);

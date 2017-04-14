@@ -27,9 +27,9 @@ export class MultiplayerService {
     let arr: {src: string}[] = [];
 
     switch (difficulty) {
-        case "small": count = 1;break;
-        case "medium": count = 2;break;
-        case "large": count = 3;break;
+      case "small": count = 1;break;
+      case "medium": count = 2;break;
+      case "large": count = 3;break;
     }
 
     for (let i:number = 0; i < count; i++ ) {
@@ -39,15 +39,15 @@ export class MultiplayerService {
   }
 
 
-    public setSrcForImageLanguage(images, lang): {} {
-      let first = lang.first;
-      let last = lang.last;
-      let obj = {first: {}, last: {}};
-      images.forEach((item) => {
-        if (item.name === first) obj.first = item;
-        if (item.name === last) obj.last = item;
-      });
-      return obj;
+  public setSrcForImageLanguage(images, lang): {} {
+    let first = lang.first;
+    let last = lang.last;
+    let obj = {first: {}, last: {}};
+    images.forEach((item) => {
+      if (item.name === first) obj.first = item;
+      if (item.name === last) obj.last = item;
+    });
+    return obj;
   }
 
 }

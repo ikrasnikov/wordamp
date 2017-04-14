@@ -50,7 +50,7 @@ export class ResultComponent {
       this._roomId = param['id'];
     });
 
-    this._roomObservable = this._dbService.getObjectFromFB(`rooms/${this._roomId}`);
+    this._roomObservable = this._dbService.getObjectFromFireBase(`rooms/${this._roomId}`);
     this._room = this._roomObservable.subscribe(data=> {
 
       if (data.$value === null) {
@@ -126,14 +126,14 @@ export class ResultComponent {
 
 
   private _deleteRoomAndStartNewGame():void {
-    this._dbService.deleteRoom(this._roomId);
+    this._dbService.deleteRoomOnFireBase(this._roomId);
     this._roomObservable.remove().then( () => this._createGameService.makePlayZone(this._model));
   }
 
 
   public goToMainMenu():void{
     this._room.unsubscribe();
-    this._dbService.deleteRoom(this._roomId).then(() => this._router.navigate(['mainmenu']));
+    this._dbService.deleteRoomOnFireBase(this._roomId).then(() => this._router.navigate(['mainmenu']));
   }
 
 }

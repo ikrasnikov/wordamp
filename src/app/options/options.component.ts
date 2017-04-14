@@ -17,10 +17,13 @@ export class OptionsComponent implements OnDestroy {
   private defaultOptions: any;
   private _showSubscriber: Subscription;
   private _gameType: string;
-  public keyDownHandler: any;
+  private _keyDownHandler: any;
+  private _closeDropDownLangHandler: any;
 
   public isEditing:boolean = false;
   public isShow:boolean = false;
+
+  public isOpenMenu = {first: false, last: false};
 
   public currentImageLanguage: EventTarget;
   public currentLanguages: TLanguages = {
@@ -41,14 +44,16 @@ export class OptionsComponent implements OnDestroy {
               private _joinService: JoinGameService,
               private _optionsService: OptionsService) {
 
-    this.keyDownHandler = this._endingOfSettingsByKeyEvent.bind(this);
+    this._keyDownHandler = this._endingOfSettingsByKeyEvent.bind(this);
+    this._closeDropDownLangHandler = this._closeDropDownByOutputClick.bind(this);
 
     this._showSubscriber = this._optionsService.showOptions
       .subscribe(gameType =>  {
         this.isShow = true;
         this._gameType = gameType;
 
-        document.addEventListener("keydown", this.keyDownHandler);
+        document.addEventListener("keydown", this._keyDownHandler);
+        document.addEventListener("click", this._closeDropDownLangHandler);
         this.imageOfLanguages = this._joinService.imageOfLanguages;
         this.defaultOptions = JSON.parse(this._localSrorage.getLocalStorageValue('user'));
         this._updateFormGroup();
@@ -61,7 +66,8 @@ export class OptionsComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
-    document.removeEventListener("keydown", this.keyDownHandler);
+    document.removeEventListener("keydown", this._keyDownHandler);
+    document.removeEventListener("click", this._closeDropDownLangHandler);
     this._showSubscriber.unsubscribe();
     this.getChangesFromForm.unsubscribe();
   }
@@ -71,40 +77,56 @@ export class OptionsComponent implements OnDestroy {
     //reactive form for user
     this.menuGame = this._build.group({
       username: new FormControl(this.defaultOptions.username),
+      difficulty: new FormControl(this.defaultOptions.difficulty),
       languages: new FormGroup({
         first: new FormControl(this.defaultOptions.languages.first),
-        last: new FormControl(this.defaultOptions.languages.last)
+        last: new FormControl(this.defaultOptions.languages.last),
       }),
-      difficulty: new FormControl(this.defaultOptions.difficulty)
     });
   }
 
 
-  private _endingOfSettingsByKeyEvent(event: Event): void {
-    let code = (event as KeyboardEvent).keyCode;
-    if (code === 13 || code === 27) {
-      event.preventDefault();
-      document.removeEventListener("keydown", this.keyDownHandler);
-      code === 13 ? this.startGame(event) : this.closePopup();
+  private _endingOfSettingsByKeyEvent(event: KeyboardEvent): void {
+    if (event.keyCode === 13) {
+      this.startGame();
+    }
+    if (event.keyCode === 27) {
+      this.closePopup();
+    }
+
+  }
+
+  private _closeDropDownByOutputClick(event: Event): void {
+    if (!(event.target as HTMLElement).classList.contains("img-responsive") &&
+      !(event.target as HTMLElement).classList.contains("languages")  &&
+      !(event.target as HTMLElement).classList.contains("menu")) {
+      this.isOpenMenu.first = false;
+      this.isOpenMenu.last = false;
     }
   }
 
-
-  public startGame(event){
-    (event.target as HTMLElement).setAttribute("disabled", "true");
-    document.removeEventListener("keydown", this.keyDownHandler);
-    this.getChangesFromForm.unsubscribe();
-    this.isShow = false;
-    this._gameType === 'multi' ? this._optionsService.createMultiGame.emit(this.menuGame.value) : this._optionsService.createSingleGame.emit(this.menuGame.value);
+  public onFormSubmit(event) {
     event.preventDefault();
-}
+    (event.target as HTMLButtonElement).disabled = true;
+
+    this.startGame();
+  }
+
+  public startGame(){
+    document.removeEventListener("keydown", this._keyDownHandler);
+    document.removeEventListener("click", this._closeDropDownLangHandler);
+    this.isShow = false;
+
+    this._gameType === 'multi'
+      ? this._optionsService.createMultiGame.emit(this.menuGame.value)
+      : this._optionsService.createSingleGame.emit(this.menuGame.value);
+  }
 
 
   public closePopup(){
-    console.log("click");
-    document.removeEventListener("keydown", this.keyDownHandler);
+    document.removeEventListener("keydown", this._keyDownHandler);
+    document.removeEventListener("click", this._closeDropDownLangHandler);
     this.isShow = false;
-    this.getChangesFromForm.unsubscribe();
   }
 
   public toogleStateOfEditing(): void {
@@ -119,20 +141,19 @@ export class OptionsComponent implements OnDestroy {
     (e.target as HTMLInputElement).select();
   }
 
-  public saveNameOfLangByClickOnItem(e :Event) : void {
-    let name: string = (e.target as HTMLElement).getAttribute("name");
-    ((e.target as HTMLElement).getAttribute("data-order") === "first")? this.menuGame.value.languages.first = name: this.menuGame.value.languages.last = name;
-     this._localSrorage.setLocalStorageValue("user", JSON.stringify(this.menuGame.value));
-}
+  public saveNameOfLangByClickOnItem(name, order) : void {
+    this.menuGame.value.languages[order] = name;
+    this._localSrorage.setLocalStorageValue("user", JSON.stringify(this.menuGame.value));
+  }
 
   private _setLanguagePicture(): void {
-  this.imageOfLanguages.forEach(image => {
-     if (this.menuGame.value.languages.first === image.name)
-       this.currentLanguages.first = image;
-     if (this.menuGame.value.languages.last === image.name)
-       this.currentLanguages.last = image;
-   });
- }
+    this.imageOfLanguages.forEach(image => {
+      if (this.menuGame.value.languages.first === image.name)
+        this.currentLanguages.first = image;
+      if (this.menuGame.value.languages.last === image.name)
+        this.currentLanguages.last = image;
+    });
+  }
 
   public setNewLanguageImage(e: Event): void {
     //spacially for FireFox

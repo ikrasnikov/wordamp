@@ -68,7 +68,7 @@ export class GamePlayService {
         data.type === 'multi' ? this._initMultiPlayerGame(data) : this._initSinglePlayerGame(data);
       });
 
-    this._roomObservable = this._dbService.getObjectFromFB(`rooms/${roomId}`)
+    this._roomObservable = this._dbService.getObjectFromFireBase(`rooms/${roomId}`)
       .subscribe(this.streamFromFirebase);
   }
 
@@ -330,7 +330,7 @@ export class GamePlayService {
 
   public goToMainMenu(): void{
     this._userIsLeft = true;
-    this._dbService.deleteRoom(this._roomId)
+    this._dbService.deleteRoomOnFireBase(this._roomId)
       .then(() => this._router.navigate([`mainmenu`]))
   }
 

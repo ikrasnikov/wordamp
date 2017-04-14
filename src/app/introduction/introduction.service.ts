@@ -6,7 +6,7 @@ import { Subscription } from "rxjs";
 
 @Injectable()
 export class IntroductionService {
-    private _defaltNickNames:string[] = [
+  private _defaltNickNames:string[] = [
     "Donald Duc", "Crazy Cow", "Batman",
     "Кэп", "Harry Potter", "Jolly Rodger",
     "Scrooge McDuck", "Orange", "Lord Braine",
@@ -37,34 +37,34 @@ export class IntroductionService {
     'Blimp','Butter ball','Fat-a-potamis','Trouser destroyer',
     'fat','pig or swine','physically challenged','big butt',
     'balloon','gas filled','God zilla'];
-    
-   public getLangEmit:EventEmitter<any>;
-    
+
+  public emitDefaultOptions:EventEmitter<any>;
+
 
   constructor(private _router: Router,
               private _localSrorage: LocalStorageService,
-               private _dbService: DBService) {
-                 this.getLangEmit = new EventEmitter();
-               }
+              private _dbService: DBService) {
+    this.emitDefaultOptions = new EventEmitter();
+  }
 
   public animate(options): void {
     let start:number = performance.now();
     requestAnimationFrame(function _animate(time) {
-        let timeFraction: number = (time - start) / options.duration;
-        if (timeFraction > 1) timeFraction = 1;
-        let progress = options.timing(timeFraction);
-        options.draw(progress);
-        if (timeFraction < 1) {
-            requestAnimationFrame(_animate);
-        }else {
-            options.cb && options.cb();
-        }
+      let timeFraction: number = (time - start) / options.duration;
+      if (timeFraction > 1) timeFraction = 1;
+      let progress = options.timing(timeFraction);
+      options.draw(progress);
+      if (timeFraction < 1) {
+        requestAnimationFrame(_animate);
+      }else {
+        options.cb && options.cb();
+      }
     });
   }
 
   public setDefaultName():string {
-      let rand:number = Math.round(Math.random() * (this._defaltNickNames.length - 1));    
-      return this._defaltNickNames[rand];
+    let rand:number = Math.round(Math.random() * (this._defaltNickNames.length - 1));
+    return this._defaltNickNames[rand];
   }
 
   public isShowMainPageForUser():void {
@@ -73,7 +73,7 @@ export class IntroductionService {
     }
   }
 
-   public setDefaultOptions(username: string): void {
+  public getDefaultOptions(username: string) {
     let options: TInputData = {
       username: username,
       difficulty: "small",
@@ -84,14 +84,14 @@ export class IntroductionService {
       type: ""
     };
 
-    let dictionaryListObservable: Subscription = this._dbService.getObjectFromFB(`dictionary/languagaesList`).subscribe(lang => {
-
-      options.languages.first = this._getLanguage("first",lang);
-      options.languages.last = this._getLanguage("last",lang);
-      this.getLangEmit.emit(options);
-      dictionaryListObservable.unsubscribe();
-    });
-
+    return this._dbService.getObjectFromFireBase(`dictionary/languagaesList`)
+      .take(1)
+      .map(lang => {
+        options.languages.first = this._getLanguage("first",lang);
+        options.languages.last = this._getLanguage("last",lang);
+        options.type = "single";
+        return options;
+      });
   }
 
   private _getLanguage(type: string, languagesList: string[]): string {
