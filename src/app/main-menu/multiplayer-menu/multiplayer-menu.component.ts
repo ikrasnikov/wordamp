@@ -15,32 +15,32 @@ import {OptionsService} from "../../options/options.service";
 })
 export class MultiplayerMenuComponent implements OnDestroy {
 
-  public rooms: TOutputData[] =[];
-  private subscribe: Subscription;
+  public rooms;
+  public seekingUserName:string;
+  private _subscribtion: Subscription;
   private _createGameSubscriber: Subscription;
-  private imageOfLanguages: any[] = [];
+  private _imageOfLanguages: any[] = [];
 
   constructor(private _multiService: MultiplayerService,
               private _joingameService: JoinGameService,
-              private _localSrorage: LocalStorageService,
+              private _storageService: LocalStorageService,
               private _createGameService: CreateGameService,
               private _router: Router,
               private _dbService: DBService,
               private _optionsService: OptionsService
-              ) {
+  ) {
 
-   this._createGameSubscriber = this._optionsService.createMultiGame.
-    subscribe(() => this.startMultiGame());
-   this.imageOfLanguages = this._joingameService.imageOfLanguages;
-   this._updateRooms();
+
+    this._createGameSubscriber = this._optionsService.createMultiGame
+      .subscribe(() => this.startMultiGame());
+    this._imageOfLanguages = this._joingameService.imageOfLanguages;
+    this._updateRooms();
   }
 
 
   ngOnDestroy(){
     this._createGameSubscriber.unsubscribe();
-     this.subscribe.unsubscribe();
   }
-
 
   public showOptions(){
     this._optionsService.showOptions.emit('multi');
@@ -48,28 +48,26 @@ export class MultiplayerMenuComponent implements OnDestroy {
 
 
   private _updateRooms() {
-    this.subscribe = this._dbService.getAllMultiPlayerRoom().subscribe(data => {
-      this.rooms  =
-        data.filter(item => {
-                if (item.users.length < 2 && !this._multiService.isItemExistsInCurrentArray(item, this.rooms))  return item;
-            })
-            .map(item => {
-                return {id: item.$key, player: item.users[0].name, difficulty: this._multiService.setDifficultyInGame(item.difficulty), language: this._multiService.setSrcForImageLanguage(this.imageOfLanguages,item.languages)};
-            });
+
+    this.rooms = this._dbService.getAllMultiPlayerRoomFromFireBase()
+      .map(data => {
+        return data
+          .filter(item=>item.users.length < 2)
+          .map(item => {
+            return {id: item.$key, player: item.users[0].name, difficulty: this._multiService.setDifficultyInGame(item.difficulty), language: this._multiService.setSrcForImageLanguage(this._imageOfLanguages,item.languages)};
+          })
       });
   }
 
   public joinGame(idRoom: number):void {
-    this.subscribe.unsubscribe();
-    sessionStorage['userid'] = this._createGameService.getGeneratedRandomId().toString();
+
     this._joingameService.addUserToFireBase(idRoom);
   }
 
-  public findRoomByUserName(e) {
-    let inputValue = e.target.value;
-    if (inputValue !== "") {
+  public findRoomByUserName() {
+    if (this.seekingUserName !== "") {
       let arr = this.rooms.filter((item)=> {
-        let regex = new RegExp(`${inputValue}`, 'ig');
+        let regex = new RegExp(`${this.seekingUserName}`, 'ig');
         if(regex.test(item.player)) return item;
       });
       this.rooms = arr;
@@ -79,9 +77,8 @@ export class MultiplayerMenuComponent implements OnDestroy {
   }
 
   public startMultiGame(): void {
-     this.subscribe.unsubscribe();
-    sessionStorage['userid'] = this._createGameService.getGeneratedRandomId().toString();
-    let options = JSON.parse(this._localSrorage.getLocalStorageValue("user"));
+    this._storageService.setSesionStorageValue('useid', this._createGameService.getGeneratedRandomId().toString());
+    let options = JSON.parse(this._storageService.getLocalStorageValue("user"));
     options.type ="multi";
     this._createGameService.makePlayZone(options);
   }

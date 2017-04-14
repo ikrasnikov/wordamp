@@ -11,7 +11,7 @@
 }
 
 .title {
-    margin-top: 0;
+  margin-top: 0;
 }
 h1 {
   font-size: 2.5em;
@@ -42,8 +42,8 @@ div.new-name {
   margin: 3% 0 3% 0;
 }
 div.new-name label {
-   font-size: 1.7em;
-   font-weight: normal;
+  font-size: 1.7em;
+  font-weight: normal;
 }
 .new-name input {
   font-size: 14px;
@@ -79,12 +79,12 @@ div.new-name label {
   outline: none;
 }
 .lang button img {
-   -webkit-box-shadow: 0 0 6px 2px rgba(0,0,0,0.5) ;
+  -webkit-box-shadow: 0 0 6px 2px rgba(0,0,0,0.5) ;
   box-shadow: 0 0 6px 2px rgba(0,0,0,0.5);
   border-radius: 50%;
 }
 
-.menu.dropdown-menu {
+.menu.dropdown-menu.open {
   z-index: 100;
   background-color: rgba(240, 248, 255, 1);
   width: 210px;
@@ -116,7 +116,7 @@ div.new-name label {
   border-radius: 50%;
 }
 
-.menu.close {
+.menu {
   display: none;
 }
 div.lang.last  {
@@ -134,7 +134,7 @@ div.lang.last  {
 }
 .difficulty input:checked  + label .img_box img {
   border-radius: 10px;
-   text-shadow: 4px 4px 6px rgba(0,0,0,0.5) ;
+  text-shadow: 4px 4px 6px rgba(0,0,0,0.5) ;
   -webkit-box-shadow: 0 0 2px 2px rgba(0,0,0,0.5) ;
   box-shadow: 0 0 2px 2px rgba(0,0,0,0.5) ;
 }
@@ -168,9 +168,9 @@ div.lang.last  {
 }
 /**************btn start************/
 .submit a {
- margin: 1% 0 1% 0;
- /*width: 75%;*/
- /*width: 15%;*/
+  margin: 1% 0 1% 0;
+  /*width: 75%;*/
+  /*width: 15%;*/
 }
 .submit {
   text-align: center;
@@ -180,43 +180,43 @@ div.lang.last  {
   width: 45px;
 }
 .myButton {
-   font-size: 1.5em;
-	padding:15px 90px;
-	-moz-box-shadow: -1px 9px 14px -7px #3e7327;
-	-webkit-box-shadow: -1px 9px 14px -7px #3e7327;
-	box-shadow: -1px 9px 14px -7px #3e7327;
-	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #77b55a), color-stop(1, #72b352));
-	background:-moz-linear-gradient(top, #77b55a 5%, #72b352 100%);
-	background:-webkit-linear-gradient(top, #77b55a 5%, #72b352 100%);
-	background:-o-linear-gradient(top, #77b55a 5%, #72b352 100%);
-	background:-ms-linear-gradient(top, #77b55a 5%, #72b352 100%);
-	background:linear-gradient(to bottom, #77b55a 5%, #72b352 100%);
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#77b55a', endColorstr='#72b352',GradientType=0);
-	background-color:#77b55a;
-	-moz-border-radius:21px;
-	-webkit-border-radius:21px;
-	border-radius:21px;
-	border:1px solid #4b8f29;
-	display:inline-block;
-	cursor:pointer;
-	color:#ffffff;
-	font-weight:bold;
-	text-decoration:none;
-	text-shadow:0px 2px 0px #5b8a3c;
+  font-size: 1.5em;
+  padding:15px 90px;
+  -moz-box-shadow: -1px 9px 14px -7px #3e7327;
+  -webkit-box-shadow: -1px 9px 14px -7px #3e7327;
+  box-shadow: -1px 9px 14px -7px #3e7327;
+  background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #77b55a), color-stop(1, #72b352));
+  background:-moz-linear-gradient(top, #77b55a 5%, #72b352 100%);
+  background:-webkit-linear-gradient(top, #77b55a 5%, #72b352 100%);
+  background:-o-linear-gradient(top, #77b55a 5%, #72b352 100%);
+  background:-ms-linear-gradient(top, #77b55a 5%, #72b352 100%);
+  background:linear-gradient(to bottom, #77b55a 5%, #72b352 100%);
+  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#77b55a', endColorstr='#72b352',GradientType=0);
+  background-color:#77b55a;
+  -moz-border-radius:21px;
+  -webkit-border-radius:21px;
+  border-radius:21px;
+  border:1px solid #4b8f29;
+  display:inline-block;
+  cursor:pointer;
+  color:#ffffff;
+  font-weight:bold;
+  text-decoration:none;
+  text-shadow:0px 2px 0px #5b8a3c;
 }
 .myButton:hover {
-	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #72b352), color-stop(1, #77b55a));
-	background:-moz-linear-gradient(top, #72b352 5%, #77b55a 100%);
-	background:-webkit-linear-gradient(top, #72b352 5%, #77b55a 100%);
-	background:-o-linear-gradient(top, #72b352 5%, #77b55a 100%);
-	background:-ms-linear-gradient(top, #72b352 5%, #77b55a 100%);
-	background:linear-gradient(to bottom, #72b352 5%, #77b55a 100%);
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#72b352', endColorstr='#77b55a',GradientType=0);
-	background-color:#72b352;
+  background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #72b352), color-stop(1, #77b55a));
+  background:-moz-linear-gradient(top, #72b352 5%, #77b55a 100%);
+  background:-webkit-linear-gradient(top, #72b352 5%, #77b55a 100%);
+  background:-o-linear-gradient(top, #72b352 5%, #77b55a 100%);
+  background:-ms-linear-gradient(top, #72b352 5%, #77b55a 100%);
+  background:linear-gradient(to bottom, #72b352 5%, #77b55a 100%);
+  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#72b352', endColorstr='#77b55a',GradientType=0);
+  background-color:#72b352;
 }
 .myButton:active {
-	position:relative;
-	top:1px;
+  position:relative;
+  top:1px;
 }
 
 /******** media **********/
@@ -228,8 +228,8 @@ div.lang.last  {
 
 @media screen and (min-width: 1024px)  {
   .new-name input {
-     font-size: 20px;
-     padding: 20px 10px 20px 10px;
+    font-size: 20px;
+    padding: 20px 10px 20px 10px;
   }
 }
 @media screen and (max-width: 992px)  {
@@ -252,7 +252,7 @@ div.lang.last  {
     height: 10px;
     font-size: .9em;
   }
-   .difficulty .img_box{
+  .difficulty .img_box{
     height: 70px;
   }
   .waiting  .image-wait {
@@ -295,21 +295,21 @@ div.lang.last  {
     width: 75%;
   }
   .submit .btn {
-   font-size: 1em;
-   margin: 1% 0 1% 0;
-   padding: 7px 10px;
-   width: 100%;
-   transform: translateX(0);
- }
- h1 {
-  font-size: 2em;
+    font-size: 1em;
+    margin: 1% 0 1% 0;
+    padding: 7px 10px;
+    width: 100%;
+    transform: translateX(0);
+  }
+  h1 {
+    font-size: 2em;
   }
   .submit .play {
     width: 45%;
   }
   .myButton {
-   font-size: 1.2em;
-	padding: 8px 60px;
+    font-size: 1.2em;
+    padding: 8px 60px;
   }
 }
 @media screen and (max-width: 500px)  {
@@ -340,10 +340,10 @@ div.lang.last  {
     margin-top: 10%;
   }
   div.new-name .username, .title  {
-     margin-left: -15px;
+    margin-left: -15px;
   }
   label.username {
-   text-align: left;
+    text-align: left;
   }
   .difficulty input:checked  + label .img_box img {
     border-radius: 5px;
@@ -358,7 +358,7 @@ div.lang.last  {
     width: 80px;
     height: 80px;
   }
-   .menu.dropdown-menu {
+  .menu.dropdown-menu {
     width: 110px;
   }
   .menu img.languages {
@@ -395,7 +395,7 @@ div.lang.last  {
   h1{
     font-size: 1.8em;
   }
-   .submit .play {
+  .submit .play {
     width: 75%;
   }
 }

@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { CreateGameService } from "./create-game.service";
 import { LocalStorageService } from "../local-storage.service";
-import { Subscription } from "rxjs";
+import { Subscription, Observable } from "rxjs";
 import { DBService } from '../db.service';
-import { Router} from '@angular/router';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class JoinGameService {
 
-    public imageOfLanguages: TItemLang[] = [
+  public imageOfLanguages: TItemLang[] = [
     {
       src: "assets/img/icons/germany.svg",
       name: "de"
@@ -28,40 +28,40 @@ export class JoinGameService {
   ];
 
 
-   constructor(private _dbService: DBService,
-               private _createGameService: CreateGameService,
-               private _localSrorage: LocalStorageService,
-               private _router: Router) {}
+  constructor(
+    private _dbService: DBService,
+    private _createGameService: CreateGameService,
+    private _storageService: LocalStorageService,
+    private _router: Router
+  ) { }
 
-  public addUserToFireBase(idRoom: number): void {
-    let newUser: TUser = {name: this._getUserNameFromLocalStorage(), score: 20, id: +sessionStorage['userid'], isActive: false, result: "lose"};
+  public addUserToFireBase(idRoom: number) {
+    let userid =  this._createGameService.getGeneratedRandomId().toString()
+    this._storageService.setSesionStorageValue('userid',userid)
+
+    let newUser: TUser = {
+      name: this._getUserNameFromLocalStorage(),
+      score: 20,
+      id: +userid,
+      isActive: false,
+      result: "lose"
+    };
     let currentUser: TUser;
 
-    let roomSubscribe: Subscription = this._dbService.getObjectFromFB(`rooms/${idRoom}`).subscribe((data) => {
-      currentUser = data.users[0];
-
-      this._dbService.getObjectFromFB(`rooms/${idRoom}`).update({users: [currentUser, newUser], state: true})
-        .then(() =>  {
-          roomSubscribe.unsubscribe();
-          this._router.navigate(['playzone', idRoom])
-        });
-    });
+    this._dbService.getObjectFromFireBase(`rooms/${idRoom}`)
+      .take(1)
+      .map(data => data.users)
+      .switchMap(user => {
+        return Observable.fromPromise(this._dbService.getObjectFromFireBase(`rooms/${idRoom}`).update({ users: [user[0], newUser], state: true }) as Promise<void>);
+      })
+      .subscribe((data) => {
+        this._router.navigate(['playzone', idRoom])
+      });
   }
 
   private _getUserNameFromLocalStorage(): string {
-     let localData = this._localSrorage.getLocalStorageValue("user");
-    return localData ?  JSON.parse(localData).username : 'Unknown';
-  }
-
-
- public doIfShareableLinkIsActivated(roomId: number): void {
-    let shareLink: Subscription = this._dbService.getObjectFromFB(`rooms/${roomId}`).subscribe(data => {
-      if (data.users.length === 1) {
-        shareLink.unsubscribe();
-        sessionStorage['userid'] = this._createGameService.getGeneratedRandomId().toString();
-        this.addUserToFireBase(roomId);
-      }
-    });
+    let localData = this._storageService.getLocalStorageValue("user");
+    return localData ? JSON.parse(localData).username : 'Unknown';
   }
 
 }

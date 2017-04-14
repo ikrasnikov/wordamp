@@ -16,11 +16,11 @@ export class MainMenuComponent implements OnDestroy{
 
   constructor(private _createGameService: CreateGameService,
               private _router: Router,
-              private _localSrorage: LocalStorageService,
+              private _storageService: LocalStorageService,
               private _optionsService: OptionsService) {
 
     if (!this._redirectToIntro()) this._router.navigate(['/']);
-   this._createGameSubscriber = this._optionsService.createSingleGame.subscribe(() => this._startSingleGame());
+    this._createGameSubscriber = this._optionsService.createSingleGame.subscribe(() => this._startSingleGame());
 
   }
 
@@ -29,7 +29,7 @@ export class MainMenuComponent implements OnDestroy{
   }
 
   private _redirectToIntro(): boolean {
-    return !!this._localSrorage.getLocalStorageValue("user");
+    return !!this._storageService.getLocalStorageValue("user");
   }
 
   public showOptions(event: Event){
@@ -38,9 +38,9 @@ export class MainMenuComponent implements OnDestroy{
   }
 
   private _startSingleGame(): void {
-    let options = JSON.parse(this._localSrorage.getLocalStorageValue("user"));
+    let options = JSON.parse(this._storageService.getLocalStorageValue("user"));
     options.type = "single";
-    sessionStorage['userid'] = this._createGameService.getGeneratedRandomId().toString();
+    this._storageService.setSesionStorageValue('userid', this._createGameService.getGeneratedRandomId().toString());
     this._createGameService.makePlayZone(options);
   }
 
